@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Handling, Measuring, Estimating and Visualizing Migration Data in R - 3&nbsp; Handling Migration Data in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./01-concepts.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Handling Migration Data in R</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Handling, Measuring, Estimating and Visualizing Migration Data in R</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-concepts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Migration Concepts</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-data.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Handling Migration Data in R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#contingency-table" id="toc-contingency-table" class="nav-link active" data-scroll-target="#contingency-table"><span class="toc-section-number">3.1</span>  Contingency Table</a></li>
+  <li><a href="#data-creation" id="toc-data-creation" class="nav-link" data-scroll-target="#data-creation"><span class="toc-section-number">3.2</span>  Data Creation</a></li>
+  <li><a href="#data-manipulation" id="toc-data-manipulation" class="nav-link" data-scroll-target="#data-manipulation"><span class="toc-section-number">3.3</span>  Data Manipulation</a></li>
+  <li><a href="#matrix-operations" id="toc-matrix-operations" class="nav-link" data-scroll-target="#matrix-operations"><span class="toc-section-number">3.4</span>  Matrix Operations</a></li>
+  <li><a href="#summaries" id="toc-summaries" class="nav-link" data-scroll-target="#summaries"><span class="toc-section-number">3.5</span>  Summaries</a>
+  <ul class="collapse">
+  <li><a href="#bilateral-measures" id="toc-bilateral-measures" class="nav-link" data-scroll-target="#bilateral-measures"><span class="toc-section-number">3.5.1</span>  Bilateral measures</a></li>
+  <li><a href="#total-measures" id="toc-total-measures" class="nav-link" data-scroll-target="#total-measures"><span class="toc-section-number">3.5.2</span>  Total Measures</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Handling Migration Data in R</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>The R statistical language provides many powerful tools to carry out data analysis. In this chapter we highlight some useful R functions to manipulate migration data into specific formats that might be required for more advanced functions to analysis or visualization.</p>
+<section id="contingency-table" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="contingency-table"><span class="header-section-number">3.1</span> Contingency Table</h2>
+<p>Bilateral migration data are often organized and represented in square tables, commonly referred to as migration matrices or migration flow tables. These tables are contingency tables, otherwise know as cross-tabulations or frequency tables, used in data analysis and statistics. Migration flow tables provide a structured way to organize and summarize origin-destination migration data, with rows representing the regions of origin and columns representing the regions of destinations. The cells in the table capture the number of persons migrating from one region to another. The inspection of migration tables themselves provide valuable insights into the magnitudes and directions of migration between different regions.</p>
+
+<table>
+<tbody><tr>
+<td colspan="1">
+<em>Origin</em>
+</td>
+<td colspan="5" style="text-align:center">
+<em>Destination</em>
+</td>
+</tr>
+<tr style="border-bottom:2px solid black">
+<td>
+</td>
+<td>
+A
+</td>
+<td>
+B
+</td>
+<td>
+C
+</td>
+<td>
+D
+</td>
+<td>
+Sum
+</td>
+</tr>
+<tr>
+<td>
+A
+</td>
+<td>
+</td>
+<td>
+100
+</td>
+<td>
+30
+</td>
+<td>
+70
+</td>
+<td>
+200
+</td>
+</tr>
+<tr>
+<td>
+B
+</td>
+<td>
+50
+</td>
+<td>
+</td>
+<td>
+45
+</td>
+<td>
+5
+</td>
+<td>
+100
+</td>
+</tr>
+<tr>
+<td>
+C
+</td>
+<td>
+60
+</td>
+<td>
+35
+</td>
+<td>
+</td>
+<td>
+40
+</td>
+<td>
+135
+</td>
+</tr>
+<tr>
+<td>
+D
+</td>
+<td>
+20
+</td>
+<td>
+25
+</td>
+<td>
+20
+</td>
+<td>
+</td>
+<td>
+65
+</td>
+</tr>
+<tr>
+<td>
+Sum
+</td>
+<td>
+130
+</td>
+<td>
+160
+</td>
+<td>
+95
+</td>
+<td>
+115
+</td>
+<td>
+500
+</td>
+</tr>
+
+</tbody></table>
+<p>The diagonal cells in migration flow tables represent populations that either do not migrate (remain) or make moves within the same region. These values are useful to provide a relative sense of migration in relation to local mobility or to the population not migrating. Alternatively, one can place zeros in the diagonal elements (or nothing as in the table above) so that the table only consists of those migrating between regions.</p>
+</section>
+<section id="data-creation" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="data-creation"><span class="header-section-number">3.2</span> Data Creation</h2>
+<p>In R, migration flow tables can be created directly using the <code>matrix()</code> or <code>array()</code> functions. Both functions create <code>array</code> type objects. They are sometimes a pre-requisite for more complicated functions used for describing, estimating or visualising bilateral migration data.</p>
+<p>The <code>matrix()</code> function allows users to specify the dimensions of the matrix and populate it with desired values. It can be used to create matrices of any size, and supports various options for filling in the matrix, such as using a sequence of numbers, replicating values, or using auxiliary data sources. Data is provided via a vector passed to the <code>data</code> argument. By default the data populates the matrix from the first column on, which can be altered by setting <code>byrow = FALSE</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">30</span>, <span class="dv">70</span>, <span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">45</span>, <span class="dv">5</span>, <span class="dv">60</span>, <span class="dv">35</span>, <span class="dv">0</span>, <span class="dv">40</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">20</span>, <span class="dv">0</span>),</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">4</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>m0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4]
+[1,]    0  100   30   70
+[2,]   50    0   45    5
+[3,]   60   35    0   40
+[4,]   20   25   20    0</code></pre>
+</div>
+</div>
+<p>It is often valuable to supply a vector of character strings for the origin and destination names to the <code>matrix</code> data object. These can be linked to an existing <code>matrix</code> object using the <code>dimnames()</code> via the <code>dimnames</code> argument. The corresponding <code>rownames()</code> and <code>colnames()</code> functions can be used to assign or display individual dimension names.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create region labels</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "A" "B" "C" "D"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check dimension names</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(m0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add dimension names</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(m0) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">orig =</span> r, <span class="at">dest =</span> r)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>m0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    dest
+orig  A   B  C  D
+   A  0 100 30 70
+   B 50   0 45  5
+   C 60  35  0 40
+   D 20  25 20  0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create matrix with dimension names directly</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># m0 &lt;- matrix(data = c(0, 100, 30, 70, 50, 0, 45, 5, 60, 35, 0, 40, 20, 25, 20, 0),</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#              nrow = 4, ncol = 4, byrow = TRUE,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#              dimnames = list(orig = r, dest = r))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In R, the <code>array()</code> function is used to create multidimensional arrays, which can have more than two dimensions. While the <code>matrix()</code> function creates two-dimensional structures.</p>
+<p>Similar to the <code>matrix()</code> function, the <code>array()</code> function allows users to define the dimensions of the array and populate it with desired values. However, in the <code>array()</code> function, the dimensions are specified as a vector to the <code>dim</code> argument, indicating the size of each dimension. The <code>array()</code> function can be seen as a generalization of the <code>matrix()</code> function, as matrices are a specific type of two-dimensional arrays. By using the <code>array()</code> function, users can work with data that requires more complex organization and analysis, such as migration flows cross classified by origin, destination and additional variables such as sex, age or education.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="at">data =</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="at">size =</span> <span class="dv">32</span>),</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">2</span>),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">orig =</span> r, <span class="at">dest =</span> r, <span class="at">sex =</span> <span class="fu">c</span>(<span class="st">"female"</span>, <span class="st">"male"</span>)))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>m1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>, , sex = female
+
+    dest
+orig  A  B  C  D
+   A 31 89 22 56
+   B 55 28 40 25
+   C  6 74 83 16
+   D 48 49 62 29
+
+, , sex = male
+
+    dest
+orig   A  B  C  D
+   A  84 43  3 42
+   B  46 52 65 17
+   C 100 71  7 23
+   D  34 70 67 77</code></pre>
+</div>
+</div>
+</section>
+<section id="data-manipulation" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="data-manipulation"><span class="header-section-number">3.3</span> Data Manipulation</h2>
+<p>Statistical offices, government agencies, and international organizations collect and disseminate migration data in different formats to accommodate the needs of users and researchers. The format of the data may not necessarily be in square matrices that can be read directly into R and converted into a <code>matrix</code> object. However, there are useful functions in R that can be employed to convert data into appropriate formats for migration analysis.</p>
+<p>The <code>xtabs()</code> function is particularly helpful as it enables the conversion of data frames in a tidy format <span class="citation" data-cites="Wickham2014">(<a href="references.html#ref-Wickham2014" role="doc-biblioref"><strong>Wickham2014?</strong></a>)</span> into matrices or arrays. It requires a <code>formula</code> argument that specifies the column names in the data frame that will be used to construct and populate the <code>matrix</code> or <code>array</code>. The formula consists of the left-hand side representing the column name with the data to fill, the <code>~</code> symbol to separate the left and right-hand sides, and the right-hand side representing the columns used for cross-classifying the left-hand variable (separated by <code>+</code>). The <code>data</code> argument specifies the object where the data presented in a tidy format with variables included in the formula.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 3
+   orig  dest   flow
+   &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+ 1 A     A         1
+ 2 A     B         2
+ 3 A     C         3
+ 4 A     D         4
+ 5 B     A         5
+ 6 B     B         6
+ 7 B     C         7
+ 8 B     D         8
+ 9 C     A         9
+10 C     B        10
+11 C     C        11
+12 C     D        12
+13 D     A        13
+14 D     B        14
+15 D     C        15
+16 D     D        16</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    dest
+orig  A  B  C  D
+   A  1  2  3  4
+   B  5  6  7  8
+   C  9 10 11 12
+   D 13 14 15 16</code></pre>
+</div>
+</div>
+<p>The <code>as.data.frame.table()</code> function provides an inverse of the data manipulation of the <code>xtabs()</code> function, whereby it takes a <code>matrix</code> or <code>array</code> and converts it into a data frame based on the array dimension names. The <code>responseName</code> argument can be used to set the column name of the values in the cells of the <code>matrix</code> or <code>array</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert previous matrix back to tibble</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>m2 <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame.table</span>(<span class="at">responseName =</span> <span class="st">"migration"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 3
+   orig  dest  migration
+   &lt;fct&gt; &lt;fct&gt;     &lt;int&gt;
+ 1 A     A             1
+ 2 B     A             5
+ 3 C     A             9
+ 4 D     A            13
+ 5 A     B             2
+ 6 B     B             6
+ 7 C     B            10
+ 8 D     B            14
+ 9 A     C             3
+10 B     C             7
+11 C     C            11
+12 D     C            15
+13 A     D             4
+14 B     D             8
+15 C     D            12
+16 D     D            16</code></pre>
+</div>
+</div>
+<p>Note, above we use <code>as_tibble()</code> to convert the <code>data.frame</code> object returned from <code>as.data.frame.table()</code> to the more user friendly <code>tibble</code> object type (insert citation) and use the pipe line function <code>%&gt;%</code> to combine together a sequence of R functions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert array to tibble</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> m1 <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame.table</span>(<span class="at">responseName =</span> <span class="st">"flow"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>d1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 32 × 4
+   orig  dest  sex     flow
+   &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;  &lt;int&gt;
+ 1 A     A     female    31
+ 2 B     A     female    55
+ 3 C     A     female     6
+ 4 D     A     female    48
+ 5 A     B     female    89
+ 6 B     B     female    28
+ 7 C     B     female    74
+ 8 D     B     female    49
+ 9 A     C     female    22
+10 B     C     female    40
+# … with 22 more rows</code></pre>
+</div>
+</div>
+</section>
+<section id="matrix-operations" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="matrix-operations"><span class="header-section-number">3.4</span> Matrix Operations</h2>
+<p>When working with <code>matrix</code> objects based on migration data in R there are additional functions that are useful for further formatting and data exploration. The <code>addmargins()</code> function is a useful tool for adding row and column margin totals to a <code>matrix</code> or <code>array</code> object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">addmargins</span>(<span class="at">A =</span> m0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     dest
+orig    A   B  C   D Sum
+  A     0 100 30  70 200
+  B    50   0 45   5 100
+  C    60  35  0  40 135
+  D    20  25 20   0  65
+  Sum 130 160 95 115 500</code></pre>
+</div>
+</div>
+<p>When working with migration matrices in R, it can sometimes be challenging to effectively view and analyze the data due to various factors such as lengthy dimension names and large unit sizes. Additionally, the inclusion of diagonal terms, which are often not of interest in migration analysis, can further complicate the interpretation of the matrix. R provides several helpful functions that can assist in adapting migration matrix objects for easier viewing and analysis. To illustrate, we use the <code>uar_1960</code> object from the <strong>migest</strong> package, which represents a lifetime migration matrix for the Governorates of the United Arab Republic in 1960 as documented in the United Nations manual by <span class="citation" data-cites="UnitedNations1983">(<a href="references.html#ref-UnitedNations1983" role="doc-biblioref"><strong>UnitedNations1983?</strong></a>)</span>. Notice how the object is difficult to view due to issues described above:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(migest)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>uar_1960</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            dest
+orig           Cairo Alexandria Port-Said Ismailia Kalyubia Gharbia Menoufia
+  Cairo      2079434      31049      5293     9813    23837   10034     7038
+  Alexandria   47220    1085602      2641     2625     2135    4921     1505
+  Port-Said     9464       2562    168046     6461      496     817      323
+  Ismailia      9518       1395      3490   171297      718     910      306
+  Kalyubia     90668       4730       758     3182   886464    3727     3523
+  Gharbia      99179      39953      1742     3347     7870 1604851     6313
+  Menoufia    216764      46781      1640     3338     2918   29580  1308283
+  Giza         64584       4899       513     2013     2887    1503     2161
+  Assyiut     100305      25497      1738     2522      122    2245      636
+  Souhag      100100      63712     12087     9436      295    2791     1095
+  All others  456464     177476     43898    66973    49816   47315    12179
+            dest
+orig            Giza Assyiut  Souhag All others
+  Cairo        88543    4951    2569      58476
+  Alexandria    6910    1355    1467      29534
+  Port-Said     1505     326     454      11184
+  Ismailia      1593     319     263      10269
+  Kalyubia     10279     340     128      18076
+  Gharbia      14529     848     491      64140
+  Menoufia     30915     567     401      47843
+  Giza       1040179     540     433      13518
+  Assyiut      13153 1290255    5955      35157
+  Souhag       17958   11608 1540020      53224
+  All others   94577   14690   22375   11900302</code></pre>
+</div>
+</div>
+<p>When working with names or labels that are lengthy or contain unnecessary details, the <code>abbreviate()</code> function can be helpful. The function applies an algorithm to shorten the names while still retaining their essential information.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(uar_1960)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$orig
+ [1] "Cairo"      "Alexandria" "Port-Said"  "Ismailia"   "Kalyubia"  
+ [6] "Gharbia"    "Menoufia"   "Giza"       "Assyiut"    "Souhag"    
+[11] "All others"
+
+$dest
+ [1] "Cairo"      "Alexandria" "Port-Said"  "Ismailia"   "Kalyubia"  
+ [6] "Gharbia"    "Menoufia"   "Giza"       "Assyiut"    "Souhag"    
+[11] "All others"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a copy</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>u0 <span class="ot">&lt;-</span> uar_1960</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># new abbreviated region names</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">orig =</span> uar_1960 <span class="sc">%&gt;%</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rownames</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">abbreviate</span>(),</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">dest =</span> uar_1960 <span class="sc">%&gt;%</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">colnames</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">abbreviate</span>())</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$orig
+     Cairo Alexandria  Port-Said   Ismailia   Kalyubia    Gharbia   Menoufia 
+    "Cair"     "Alxn"     "Pr-S"     "Isml"     "Klyb"     "Ghrb"     "Menf" 
+      Giza    Assyiut     Souhag All others 
+    "Giza"     "Assy"     "Sohg"     "Allo" 
+
+$dest
+     Cairo Alexandria  Port-Said   Ismailia   Kalyubia    Gharbia   Menoufia 
+    "Cair"     "Alxn"     "Pr-S"     "Isml"     "Klyb"     "Ghrb"     "Menf" 
+      Giza    Assyiut     Souhag All others 
+    "Giza"     "Assy"     "Sohg"     "Allo" </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># apply the abbreviated region names</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(u0) <span class="ot">&lt;-</span> r</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>u0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      dest
+orig      Cair    Alxn   Pr-S   Isml   Klyb    Ghrb    Menf    Giza    Assy
+  Cair 2079434   31049   5293   9813  23837   10034    7038   88543    4951
+  Alxn   47220 1085602   2641   2625   2135    4921    1505    6910    1355
+  Pr-S    9464    2562 168046   6461    496     817     323    1505     326
+  Isml    9518    1395   3490 171297    718     910     306    1593     319
+  Klyb   90668    4730    758   3182 886464    3727    3523   10279     340
+  Ghrb   99179   39953   1742   3347   7870 1604851    6313   14529     848
+  Menf  216764   46781   1640   3338   2918   29580 1308283   30915     567
+  Giza   64584    4899    513   2013   2887    1503    2161 1040179     540
+  Assy  100305   25497   1738   2522    122    2245     636   13153 1290255
+  Sohg  100100   63712  12087   9436    295    2791    1095   17958   11608
+  Allo  456464  177476  43898  66973  49816   47315   12179   94577   14690
+      dest
+orig      Sohg     Allo
+  Cair    2569    58476
+  Alxn    1467    29534
+  Pr-S     454    11184
+  Isml     263    10269
+  Klyb     128    18076
+  Ghrb     491    64140
+  Menf     401    47843
+  Giza     433    13518
+  Assy    5955    35157
+  Sohg 1540020    53224
+  Allo   22375 11900302</code></pre>
+</div>
+</div>
+<p>Basic arithmetic operators can be employed to scale the data to an appropriate level, such as dividing the values by a common factor or multiplying them to achieve a desired magnitude. This can be useful when working with migration matrices to adjust the values and make them more interpretable or comparable. The <code>round()</code> function which allows users to specify the precision of numbers in your migration data, which can be handy when working with migration rates or proportions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>u1 <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="at">x =</span> u0<span class="sc">/</span><span class="dv">1000</span>, <span class="at">digits =</span> <span class="dv">1</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>u1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      dest
+orig     Cair   Alxn  Pr-S  Isml  Klyb   Ghrb   Menf   Giza   Assy   Sohg
+  Cair 2079.4   31.0   5.3   9.8  23.8   10.0    7.0   88.5    5.0    2.6
+  Alxn   47.2 1085.6   2.6   2.6   2.1    4.9    1.5    6.9    1.4    1.5
+  Pr-S    9.5    2.6 168.0   6.5   0.5    0.8    0.3    1.5    0.3    0.5
+  Isml    9.5    1.4   3.5 171.3   0.7    0.9    0.3    1.6    0.3    0.3
+  Klyb   90.7    4.7   0.8   3.2 886.5    3.7    3.5   10.3    0.3    0.1
+  Ghrb   99.2   40.0   1.7   3.3   7.9 1604.9    6.3   14.5    0.8    0.5
+  Menf  216.8   46.8   1.6   3.3   2.9   29.6 1308.3   30.9    0.6    0.4
+  Giza   64.6    4.9   0.5   2.0   2.9    1.5    2.2 1040.2    0.5    0.4
+  Assy  100.3   25.5   1.7   2.5   0.1    2.2    0.6   13.2 1290.3    6.0
+  Sohg  100.1   63.7  12.1   9.4   0.3    2.8    1.1   18.0   11.6 1540.0
+  Allo  456.5  177.5  43.9  67.0  49.8   47.3   12.2   94.6   14.7   22.4
+      dest
+orig      Allo
+  Cair    58.5
+  Alxn    29.5
+  Pr-S    11.2
+  Isml    10.3
+  Klyb    18.1
+  Ghrb    64.1
+  Menf    47.8
+  Giza    13.5
+  Assy    35.2
+  Sohg    53.2
+  Allo 11900.3</code></pre>
+</div>
+</div>
+<p>The <code>diag()</code> function allows users to manipulate the diagonal terms of a matrix, which can be much larger than the number of persons migrating in the non-diagonal cells. The <code>diag()</code> function takes a matrix as input and returns a new matrix with the same values, except that the diagonal elements are modified according to the specified rule. In the context of migration data, setting the diagonal terms to zero effectively removes the non-moving populations from the matrix, making it easier to analyze the migration flows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>u2 <span class="ot">&lt;-</span> u0</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(u2) <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>u2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      dest
+orig     Cair   Alxn  Pr-S  Isml  Klyb  Ghrb  Menf  Giza  Assy  Sohg  Allo
+  Cair      0  31049  5293  9813 23837 10034  7038 88543  4951  2569 58476
+  Alxn  47220      0  2641  2625  2135  4921  1505  6910  1355  1467 29534
+  Pr-S   9464   2562     0  6461   496   817   323  1505   326   454 11184
+  Isml   9518   1395  3490     0   718   910   306  1593   319   263 10269
+  Klyb  90668   4730   758  3182     0  3727  3523 10279   340   128 18076
+  Ghrb  99179  39953  1742  3347  7870     0  6313 14529   848   491 64140
+  Menf 216764  46781  1640  3338  2918 29580     0 30915   567   401 47843
+  Giza  64584   4899   513  2013  2887  1503  2161     0   540   433 13518
+  Assy 100305  25497  1738  2522   122  2245   636 13153     0  5955 35157
+  Sohg 100100  63712 12087  9436   295  2791  1095 17958 11608     0 53224
+  Allo 456464 177476 43898 66973 49816 47315 12179 94577 14690 22375     0</code></pre>
+</div>
+</div>
+</section>
+<section id="summaries" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="summaries"><span class="header-section-number">3.5</span> Summaries</h2>
+<section id="bilateral-measures" class="level3" data-number="3.5.1">
+<h3 data-number="3.5.1" class="anchored" data-anchor-id="bilateral-measures"><span class="header-section-number">3.5.1</span> Bilateral measures</h3>
+<p>the <em>migest</em> package offers several useful functions for generating summaries of origin-destination migration data. One such function is <em>sum_bilat()</em>, which allows you to calculate the counter flow, net flow and interchange for all migration pairs. This function can accept either a <code>matrix</code>, <code>array</code> or a <code>data.frame</code> (or <code>tibble</code>) as input.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_bilat</span>(m0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 8
+   orig  dest  corridor pair   flow counter_flow net_flow interchange
+   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;        &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
+ 1 B     A     B -&gt; A   A - B    50          100      -50         150
+ 2 C     A     C -&gt; A   A - C    60           30       30          90
+ 3 D     A     D -&gt; A   A - D    20           70      -50          90
+ 4 A     B     A -&gt; B   A - B   100           50       50         150
+ 5 C     B     C -&gt; B   B - C    35           45      -10          80
+ 6 D     B     D -&gt; B   B - D    25            5       20          30
+ 7 A     C     A -&gt; C   A - C    30           60      -30          90
+ 8 B     C     B -&gt; C   B - C    45           35       10          80
+ 9 D     C     D -&gt; C   C - D    20           40      -20          60
+10 A     D     A -&gt; D   A - D    70           20       50          90
+11 B     D     B -&gt; D   B - D     5           25      -20          30
+12 C     D     C -&gt; D   C - D    40           20       20          60</code></pre>
+</div>
+</div>
+</section>
+<section id="total-measures" class="level3" data-number="3.5.2">
+<h3 data-number="3.5.2" class="anchored" data-anchor-id="total-measures"><span class="header-section-number">3.5.2</span> Total Measures</h3>
+<p>Another useful function in the <em>migest</em> package is <code>sum_region()</code>, which allows you to generate comprehensive summaries of in-migration, out-migration, net migration, and turnover totals for each region in your migration data. Similar to the <code>sum_bilat()</code> function, <code>sum_region()</code> also accepts either a <code>matrix</code> or a <code>data.frame</code> (or <code>tibble</code>) as input, providing flexibility in working with different data formats.</p>
+<p>By using the <code>sum_region()</code> function, you can obtain valuable information about migration flows at the regional level. It calculates the total number of migrants moving into each region (in-migration), the total number of migrants moving out of each region (out-migration), the net migration balance (in-migration minus out-migration), and the turnover (sum of in-migration and out-migration) for each region. These summaries are useful for further analyses and interpretations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_region</span>(m0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  region out_mig in_mig  turn   net
+  &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 A          200    130   330   -70
+2 B          100    160   260    60
+3 C          135     95   230   -40
+4 D           65    115   180    50</code></pre>
+</div>
+</div>
+<p>Note, when the data provided to the <code>sum_region()</code> is a data frame, the origin and destination regions names are assumed to be in variables named <code>orig</code> and <code>dest</code>. In addition, the migration data are assumed to be in variable named <code>flow</code>. If the corresponding column names differ, the user can supply these to the <code>orig_col</code>, <code>dest_col</code> and <code>flow_col</code> argumenets in the <code>sum_region()</code> function.</p>
+<p>The <code>sum_country()</code> function provides the same calculations, along with summary variables names. When the input data for either the <code>sum_region()</code> or <code>sum_country()</code> functions represent more than two dimensions, the <code>group_by</code> function from the <em>dplyr</em> package should be used. To demonstrate, we use the international flow estimates of <span class="citation" data-cites="Abel2019">(<a href="references.html#ref-Abel2019" role="doc-biblioref"><strong>Abel2019?</strong></a>)</span> which can be downloaded and read directly into R from the online CSV file.</p>
+<div class="cell" data-hash="02-data_cache/html/unnamed-chunk-14_cb86de2b8d5a1a3c68272e508ce447d1">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read data from web depository</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://ndownloader.figshare.com/files/26239945"</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 235,236 × 9
+   year0 orig  dest  sd_drop_neg sd_rev_neg mig_rate da_min_open da_mi…¹ da_pb…²
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1  1990 BDI   BDI             0          0        0           0       0       0
+ 2  1990 COM   BDI             0          0        0           0       0       0
+ 3  1990 DJI   BDI             0          0        0           0       0       0
+ 4  1990 ERI   BDI             0          0        0           0       0      90
+ 5  1990 ETH   BDI             0          0        0           0       0       2
+ 6  1990 KEN   BDI            30         30       69          45      29      87
+ 7  1990 MDG   BDI             0          0        0           0       0       0
+ 8  1990 MWI   BDI             0          0        0           0       0     125
+ 9  1990 MUS   BDI             0          0        0           0       1       1
+10  1990 MYT   BDI             0          0        0           0       0       0
+# … with 235,226 more rows, and abbreviated variable names ¹​da_min_closed,
+#   ²​da_pb_closed</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># single period (1990-1995)</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>f <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year0 <span class="sc">==</span> <span class="dv">1990</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_country</span>(<span class="at">flow_col =</span> <span class="st">"da_pb_closed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 197 × 5
+   country    emi     imm    turn     net
+   &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 ABW       1662   15874   17536   14212
+ 2 AFG     345255 3421712 3766967 3076457
+ 3 AGO      82775  225637  308412  142862
+ 4 ALB     464693   21479  486172 -443214
+ 5 ARE     272648  640784  913432  368136
+ 6 ARG     444239  339393  783632 -104846
+ 7 ARM     648202  151937  800139 -496265
+ 8 ATG       6153    8387   14540    2234
+ 9 AUS     691618 1042781 1734399  351163
+10 AUT     154853  382724  537577  227871
+# … with 187 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all periods using group_by</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>f <span class="sc">%&gt;%</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year0) <span class="sc">%&gt;%</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_country</span>(<span class="at">flow_col =</span> <span class="st">"da_pb_closed"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,188 × 6
+# Groups:   year0 [6]
+   year0 country     emi     imm    turn      net
+   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+ 1  1990 ABW        1662   15874   17536    14212
+ 2  1995 ABW        4007   10945   14952     6938
+ 3  2000 ABW        3814   10064   13878     6250
+ 4  2005 ABW        7544    7124   14668     -420
+ 5  2010 ABW        8654    9910   18564     1256
+ 6  2015 ABW       16306   17316   33622     1010
+ 7  1990 AFG      345255 3421712 3766967  3076457
+ 8  1995 AFG     1286436  418906 1705342  -867530
+ 9  2000 AFG      434706 1178865 1613571   744159
+10  2005 AFG     1500149  457339 1957488 -1042810
+# … with 1,178 more rows</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./01-concepts.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Migration Concepts</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

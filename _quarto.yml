@@ -1,0 +1,28 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "Handling, Measuring, Estimating and Visualizing Migration Data in R"
+  author: "Guy J. Abel, James Raymer, Ellen Kraly"
+  date: today
+  chapters:
+    - index.qmd
+    - 00-intro.qmd
+    - 01-concepts.qmd
+    - 02-data.qmd
+    - 03-net.qmd
+    - 04-indices.qmd
+    - 05-age.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+

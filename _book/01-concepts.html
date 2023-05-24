@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Handling, Measuring, Estimating and Visualizing Migration Data in R - 2&nbsp; Migration Concepts</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./02-data.html" rel="next">
+<link href="./00-intro.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Migration Concepts</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Handling, Measuring, Estimating and Visualizing Migration Data in R</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-concepts.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Migration Concepts</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Handling Migration Data in R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#spatial" id="toc-spatial" class="nav-link active" data-scroll-target="#spatial"><span class="toc-section-number">2.1</span>  Spatial</a>
+  <ul class="collapse">
+  <li><a href="#usual-residence" id="toc-usual-residence" class="nav-link" data-scroll-target="#usual-residence"><span class="toc-section-number">2.1.1</span>  Usual Residence</a></li>
+  <li><a href="#migration-data-types" id="toc-migration-data-types" class="nav-link" data-scroll-target="#migration-data-types"><span class="toc-section-number">2.1.2</span>  Migration Data Types</a></li>
+  <li><a href="#migrant-transition-data" id="toc-migrant-transition-data" class="nav-link" data-scroll-target="#migrant-transition-data"><span class="toc-section-number">2.1.3</span>  Migrant Transition Data</a></li>
+  <li><a href="#migation-event-data" id="toc-migation-event-data" class="nav-link" data-scroll-target="#migation-event-data"><span class="toc-section-number">2.1.4</span>  Migation Event Data</a></li>
+  </ul></li>
+  <li><a href="#temporal" id="toc-temporal" class="nav-link" data-scroll-target="#temporal"><span class="toc-section-number">2.2</span>  Temporal</a>
+  <ul class="collapse">
+  <li><a href="#migration-interval" id="toc-migration-interval" class="nav-link" data-scroll-target="#migration-interval"><span class="toc-section-number">2.2.1</span>  Migration Interval</a></li>
+  </ul></li>
+  <li><a href="#migration-measures" id="toc-migration-measures" class="nav-link" data-scroll-target="#migration-measures"><span class="toc-section-number">2.3</span>  Migration Measures</a>
+  <ul class="collapse">
+  <li><a href="#region-to-region" id="toc-region-to-region" class="nav-link" data-scroll-target="#region-to-region"><span class="toc-section-number">2.3.1</span>  Region-to-region</a></li>
+  <li><a href="#region-totals" id="toc-region-totals" class="nav-link" data-scroll-target="#region-totals"><span class="toc-section-number">2.3.2</span>  Region Totals</a></li>
+  <li><a href="#rate-measures" id="toc-rate-measures" class="nav-link" data-scroll-target="#rate-measures"><span class="toc-section-number">2.3.3</span>  Rate measures</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Migration Concepts</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Within the range of forms of human mobility, migration is generally considered to a process that involves a significant change in the place of residence. There are two key dimensions that distinguish migration from other types of human movements and these are time (duration) and space (between places). That is, the process of migration involves moving to a place for an amount of time that is considered of a significant length and across a distance that is considered far – both aspects make the move significant and life changing. By life changing, we mean the person who in moving to a new place alters they way they interact with the place from which they moved. In other words, migrations are movements that change the social circumstances of the individual. It is an event that is distinguishable from other types of moves that are short duration (such as tourism or family visits) or short distance (residential mobility). Of course, both the duration and spatial dimensions of migration may be culturally defined, meaning that the processes of migration may differ between countries at a given spatial scale and at different times in terms of what constitutes as significant .</p>
+<p>In terms of practical measurement, the United Nations recommends that migration be linked to population change, where the place where one lives is defined as a place where the person ‘usually resides’ withing a given year. Excluded from the measure of migration are groups, such as seasonal migrants, who live in two or more places during the course of a year, and nomads, who do not have a fixed place of residence. Further, migration is often measured as the crossing of a boundary (as opposed to a threshold of distance), whether it be an internal administrative boundry or an international border (<span class="citation" data-cites="UnitedNations1983">(<a href="references.html#ref-UnitedNations1983" role="doc-biblioref"><strong>UnitedNations1983?</strong></a>)</span>). Migration can be measured using various units of measurement, for example, individuals, families, or households, and national or domestic migration may be measured at different geographic scales depending on the types of administrative units that are applicable, for example, provinces, states, counties, cities and villages. Different individual / household groupings and spatial scales can have large influences on the patterns that emerge from our analyses.</p>
+<p>Thus, specification of both spatial and temporal dimensions is required in the operational definition of migration used in analysis. Moreover, unlike other demographic processes such as fertility and mortality that have biological dimensions related to age, migration is a process and event that can occur multiple times over the course of the entire lifetime of a person or household.</p>
+<section id="spatial" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="spatial"><span class="header-section-number">2.1</span> Spatial</h2>
+<section id="usual-residence" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="usual-residence"><span class="header-section-number">2.1.1</span> Usual Residence</h3>
+<p>Central to the spatial dimension of defining a migration event is the concept of place of residence, used to determine the migrants origin and destination locations. The <em>Principles and Recommendations for Population and Housing Censuses</em> (UN Statistics Division 2008: 102, para. 1.463) defines usual residence as follows:</p>
+<ol type="1">
+<li><p>The place at which the person has lived continuously for most of the last 12 months (that is, for at least six months and one day), not including temporary absences for holidays or work assignments, or intends to live for at least six months;</p></li>
+<li><p>The place at which the person has lived continuously for at least the last 12 months, not including temporary absences for holidays or work assignments, or intends to live for at least 12 months.</p></li>
+</ol>
+<p>The use of two alternative criteria leaves some degree of ambiguity, where the subtle differences in each definition has potentially significant implications for the measurement of migration. Further, within either of these criteria they might be additional ambiguity if the migration data source refers to migrant intentions as opposed to the measurement of actual migration behavior: take for example, at the point of data collection, persons on short-term work assignments might have intentions to stay for only a few months, but the actual work assignment may evolve into a longer stay of many months.</p>
+<p>Spatial criteria regarding distance are also included in migration definitions (<span class="citation" data-cites="Lee1966">(<a href="references.html#ref-Lee1966" role="doc-biblioref"><strong>Lee1966?</strong></a>)</span>). e Following migration scholarship as well as international statistical recommendations, we advocate generally distinguishing between short distance / local moves, such as within cities or labor markets, and those that are considered longer distance (between cities or labor markets). There are important distinctions to be made between local mobility and migration that make their separation worthwhile: local mobility isdriven primarily by household factors while migration is driven by economic and social network factors. As with temporal criteria for defining migration. spatial criteria will reflect the specific sources of data being used for the analysis of migration which in turn reflect national statistical practices as well as specific research objectives. It is important to note, however, that the methods covered in this manual can be used to analyse and estimate both longer term migration as well as short term mobility.</p>
+<p>Countries with the benefit of population registration systems have the opportunity to measure distance of move directly by comparing address information on points of origin and destination and thus tabulate moves by the distance covered.However, in countries without population registers or the statistical means or (time consuming) resources to tap the potential of registration system, administrative or political units into which the country is divided are often used as proxies for measuring significant distance. Thus, migration is operationally defined as a change of residence from one civil division to another. It is essential to appreciate that the volume of migration is then a function of the size and even shape of areas chosen for compilation, where typically larger administrative units, such as a province or country, have a higher volume of migration compared to smaller units like cities or counties. Using larger geographic units can result in a loss of detail and accuracy in migration data. For instance, if a state is used as the unit of compilation, it may not capture migration patterns between different cities within the state, which could be important for local policy-making. On the other hand, using smaller geographic units such as census tracts may result in too much detail, making it difficult to draw broader conclusions about migration trends at the regional or national level. Most national statistical systems countries typically have hierarchies in their administrative units and provide some internal migration data to reflect one or more of these geographies.</p>
+</section>
+<section id="migration-data-types" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="migration-data-types"><span class="header-section-number">2.1.2</span> Migration Data Types</h3>
+<p>A demographic perspective often distinguishes between migration stock and flow. Migration flows are migration events that occur over time and over the course of a person’s life. Flows reflect individual (or household behavior) and, when compared to a ‘population at risk’ of experiencing migration, can be the basis for computing migration rates for a population (to be discussed further in Chapter 4. Population stock, or in our case, migration stock, are characteristics measured at the aggregate level, for example, approximately 3% of the world’s population are international migrants! (again to be discussed below). Each of these migration concepts are best measured using specific data sources.</p>
+<p>There are two main sources of data on migration flows which data and they, to a large extent, determine the types of migration that are analysed and used in demographic estimation and projections. The two main sources are administrative registers and population registration systems and national census and survey questionnaires. Administrative and population registers measure migration events continuously occurring over time. They record change in residence , analogous to registration of vital events such as births, deaths, marriages, etc. . Thus, the number of persons who have migrated within a year can be calculated as the sum of all recorded moves that occurred in that year. Often there are no duration qualifications so potentially persons can have multiple or return moves within a given year. Censuses and surveys, in contrast, are conducted at essentially one point in time, and generate cross-sectional information on population characteristics. Census and surveys , typically have retrospective questions on place of usual residence that can be cross tabulated with questions on place(s) of residence at a previous time, usually one or five years prior to the time of the census or survey. . Cross tabulations between place of residence one or five years ago with place of current residence represent migrant transitions. With these data, we do not know the exact date of the move, only that a move has occurred between two points in time. We do not know whether the move occurred 10 months ago or one week ago. Migrations followed by return within the same interval, in this example, five years, will be mixed in retrospective questions.Other types of migration data are occasionally collected in census and survey instruments that do not involve the origin location of a migration, including the duration at residence, number of moves over a given interval, and country of citizenship.</p>
+<p>Lifetime migration data is another common type of migration data that can be generated from both administrative and population registers and cross-sectional data - censuses and surveys. . Similar to migrant transition data described above, lifetime migration is measured through cross tabulation between current place of usual residence and original place of birth. However, these data are not considered a type of flow data. Instead, they are considered migrant population stock data, and constitute a population characteristic at one point in time. With these data, we do not know a time or period when the person migrated or how often and where, only that they have migrated at least once since birth. Of course, only persons surviving to the time of the census or survey would be included. In spite of these pitfalls, national censuses in particular and surveys are critical sources of data on migration and are critical to comparative analysis of migration among populations. For the measurement of international migration, stock data have been gathered and tabulated from most countries in the world by the United Nations and World Bank and are widely used to study the cumulative effects of international migration.</p>
+</section>
+<section id="migrant-transition-data" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="migrant-transition-data"><span class="header-section-number">2.1.3</span> Migrant Transition Data</h3>
+<p>Migrant transition data are a key element of migration analysis and estimation and are typically collected in national censuses, which identify migrants by comparing their place of usual residence at the time of enumeration (<span class="math inline">\(t\)</span>) with that at a specified earlier date (<span class="math inline">\(t-n\)</span>). This type of data provides information on the movements of migrants over a given time period, which is usually either 1 year (e.g.&nbsp;UK) or 5 years (e.g.&nbsp;USA). In terms of limitations, as mentioned above, migrant transition data fail to identify multiple and return moves, which can lead to an underestimation of the true level of migration. Additionally, migrants who are born or who die during the measurement period are not counted. For example, a baby born three years ago would not have a place of usual residence five years ago. Surveys may also be used to gather migration data but the sample size must be sufficient to capture what is usually a small proportion of the population making a residential transition. In any given year, the vast majority of the population do not migrate domestically, let alone internationally.</p>
+<p>In migrant transition data, a migrant is a person who has experienced one or more migrations during a period measured retrospectively. It is important to note that persons who moved during the measurement interval and subsequently died before its end should technically be counted as migrants and their moves as migrations. However, in practice, such cases are usually unknown or excluded, as the information is usually obtained at the end of the time interval and with reference to persons who are alive at that time. Similarly, with international migration, censuses can be used to measure immigrant transitions but not emigrant transitions. The reason is that the current place of residence is in country not gathering the census data. Censuses and surveys have been used to ask questions about family members who have emigrated but if the whole family migrated, then again, censuses would not capture them.This so-called network or multiplicity approach to measuring individual and household migration and emigration is an area of ongoing exploration by migration researchers.</p>
+</section>
+<section id="migation-event-data" class="level3" data-number="2.1.4">
+<h3 data-number="2.1.4" class="anchored" data-anchor-id="migation-event-data"><span class="header-section-number">2.1.4</span> Migation Event Data</h3>
+<p>Migration event data record all moves made by individuals included in an administrative system or a population register. Depending on the purpose and characteristics of the registration system, data are available for multiple and return moves, as well newborn moves, and moves immediately before death, and moves among households, for example, for marriage. Ideally, moves come from a centralised population register, however, other registers that do not necessarily cover the whole population may be used for migration analysis. For instance, some countries require persons to register with local health clinics when moves are made, others may use tax file reports with updated address information as sources of moves. Other administrative registers address enrollment in schools and or voting registrations. As we consider below, it is important to appreciate the critical relationship between migration event data and the total resident population for the analysis of patterns and use in demographic measurement and estimation models.</p>
+<p>While registers tend to provide a more complete record of migration over time, they may not be inclusive of the whole population, for example, military personnel and prisoners may not be included in registers of the national ‘noninstitutional’ population. .There may be instances where people do not register initially or fail to de-register with departing or changing status. For example, a common problem with health registration data is young adults (especially males) only register when they see a doctor (which may be several years after the move) or they do not register in their new place of residence, but continue to visit the health clinic serving their parental home. . Another issue is that geographical units adopted in administrative registers are generally larger, often regional, , and registers often fail to capture within-region moves. Additionally, administrative registers often do not include information about the characteristics of migrants outside age and sex.</p>
+</section>
+</section>
+<section id="temporal" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="temporal"><span class="header-section-number">2.2</span> Temporal</h2>
+<section id="migration-interval" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="migration-interval"><span class="header-section-number">2.2.1</span> Migration Interval</h3>
+<p>At the population level, migration is a continuous process that occurs over time. To study the propensity or rate of migration, data must be compiled with reference to specific periods of time. These time periods can be either definite or indefinite. Definite interval data are typically collected over fixed-term periods such as one year, five years, ten years, or, in the context of national census-taking, intercensal periods. Indefinite interval data such as lifetime migration measures or data based on place of last residence lack a definite time reference as age or time at the current residence varies by each individual migrant.</p>
+<p>The comparability of migration data with different definite time intervals can be prohibitively complicated. Commonly described as the ‘one-year / five-year problem,’ observed migration data consistently show that the number of migrants recorded over a five-year interval is far less than five times the number recorded over a one-year interval. In addition, the ratio of migrants between a five-year period and a one-year period is not constant, where variations occur depending on multiple factors such as the intensity and type of migration both over time and in each place of origin and destination. Consequently, there is no straightforward algebraic (mathematical?) solution to comparing one-year and five-year migration probabilities <span class="citation" data-cites="Rogerson1990">(<a href="references.html#ref-Rogerson1990" role="doc-biblioref"><strong>Rogerson1990?</strong></a>)</span>.</p>
+<p>Issues of temporality in migration data are particularly challenging for international comparison. Countries measure international migration (immigration and emigration) for their own national policy and administrative purposes, often embedded registers and data systems. The result is great variation among national practices in international migration statistics. While the United Nations recommends measures that are aligned with changes in the country of usual residence, the reality is that countries may differ greatly, ranging from, say, no defined time period, three months, six months, or 12 months. Some countries with more effective border control practices to track all entries and exits are able to generate statistics with great temporal detail and acccuracy. In Australia, for example, an immigrant is someone who was previously living abroad and stays in the country for 12/16 months. Similarly, an emigrant is someone who has been outside Australia for 12/16 months. In contrast, some countries, especially in Eastern Europe, have population registers that rely on the notion of a ‘permanent’ residence, implying that persons leaving (entering) will never return (leave). Reliance on the concept of ‘permanent residence’ results in gross undercounts of the true levels of migration. (Cite MIMOSA / IMEM papers)</p>
+</section>
+</section>
+<section id="migration-measures" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="migration-measures"><span class="header-section-number">2.3</span> Migration Measures</h2>
+<p>Migration measures are used to quantify the magnitude, direction and pace of population movements between places at different geographic scales. . These measures provide important insights into the demographic and social characteristics and dynamics of populations. There are several different types of migration measures that are commonly used in both research and policy analysis and evaluation. ach measure embodies its own analytic strengths and limitations; each should be used in relationship to the general and specific goals of the research project or policy analysis.</p>
+<p>One of the most common migration measures is the migration rate or migration intensity. A migration rate or intensity is defined as the number of migrants observed during a period of time divided by the mid-year population (or average population ‘at risk’ of migration). The migration rate can be calculated for different migration types discussed above, such as one year or five years, and maintaining the same measure, can be used to compare migration across different places or regions. It is important to note that the probability of migration is different from a rate in just how the ‘at risk’ population is defined. In a rate, the population at risk is the mid-year (average) population, whereas in probability, the population at the beginning of the time interval is used as the population at risk.</p>
+<p>Other migration measures derive from the perspective of population and migration stock discussed above. Using stock data, the count of the number of migrants is the basis for measuringthe migrant proportion. The migrant proportion is the share of the population that has migrated, measured at one point in time, for example, x% of the national population born outside of the country (using lifetime migration data). These measures can be useful for identifying patterns in migration behavior, such as the prevalence of long-distance migration or the likelihood of migration among certain social demographic groups – males and females, working ages and youth. In demography, denominators of measures are critical. For example, some analysts would argue that in the study of international migration there is no such thing as a in-migration or immigration rate since the ’population at risk consists of (all!) national populations beyond the country of interest. Rather these measures of immigration are simply ratios that compare the number of migrants to the size of the receiving population. This problem does not exist for out-migration rates or emigration rates since both have clear populations at risk of onward migration.</p>
+<p>As you are no doubt aware, all migration measures are affected by data quality, such as underreporting of migrants (reliability issues) or errors in place of residence information (validity issues)These problems tend to increase as the data become more detailed in terms of intricacies in definitions of migrants and migration.</p>
+<p>Additionally, different measures may be more appropriate for different research questions or policy applications. For example, the migration rate may be more useful for understanding the overall magnitude of migration in the population, while the count of migrants can provide a basic understanding of the scale of migration patterns over time and between different spatial units with implications for programs supporting the needs of migrants in specific places</p>
+<p>Migration measures can be defined at different levels of detail, ranging from region-to-region measures, to region totals, to system totals or index measures. Region-to-region measures capture the flow of migrants between two specific regions, while region totals capture the total number of migrants coming in or going out of a specific region. System totals, or index measures, provide an overall picture of migration within a given system or country, which we will discuss in more detail in the next chapter.</p>
+<section id="region-to-region" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="region-to-region"><span class="header-section-number">2.3.1</span> Region-to-region</h3>
+<p>We now move this discussion of migration measures and indices to consider region-to-region migration using measures represented by R notation.</p>
+<p>Region-to-region migration, also known as <em>bilateral</em> migration, migration <em>streams</em> or <em>origin-destination</em> migration, refers to a migration measure that cross-classifies region of origin by region of destination, forming a matrix of <span class="math inline">\(n \times (n-1)\)</span> streams along each origin-destination combination, where <span class="math inline">\(n\)</span> represents the number of regions. The set of region-to-region migration measures can be represented by <span class="math inline">\(m_{ij}\)</span>, where the sub-scripts <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> represent the same set of regions for each origin-destination combination. The set of bilateral migration flows provide a basis to assess the comparative volumes and directions of migration between a set of regions.</p>
+<p>The <em>gross interchange</em> represents the total number of migrants moving between a particular pair of regions, for example, <span class="math inline">\(m_{ij} + m_{ji}\)</span>. The <em>net migration steam</em> or <em>bilateral net migration</em> represents the difference in migration between a pair of region i.e.&nbsp;<span class="math inline">\(m_{ij} - m_{ji}\)</span>.</p>
+<p>For a pair of streams that are of unequal size, where the net migration stream is not close to zero, there exists a <em>dominant stream</em> which is far larger than the <em>reverse</em> or <em>counter</em> stream in the opposite direction.</p>
+</section>
+<section id="region-totals" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="region-totals"><span class="header-section-number">2.3.2</span> Region Totals</h3>
+<p>Every migration event can be considered an out-migration in relation to the region of origin and an in-migration in relation to the region of destination. As implicitly covered above, when migration events involve movement between countries , migration events are typically described as emigration and immigration, rather than out-migration and in-migration.</p>
+<p>Totals on in- or out-migration for each region are typically used to evaluate the volume of migration to or from a particular set of regions. In some countries, data is collected or aggregated without reference to the place of origin for in-migration totals or destination for out-migration totals. Consequently the migration totals provide the most detailed measure of regional migration but with little information on the direction of the migration flows between each region. A summary of the common terms for migration totals are shown in Table 1. The in-migration (or immigration) totals can be represented by replacing the origin <span class="math inline">\(i\)</span> index with a <span class="math inline">\(+\)</span>; <span class="math inline">\(m_{+j}\)</span>. Similarly, the out-migration (or emigration) totals can be represented by replacing the destination <span class="math inline">\(j\)</span> index with <span class="math inline">\(+\)</span>; <span class="math inline">\(m_{+j}\)</span>.</p>
+<p>For our purposes in using R for migration analysis in the next several chapters and exercises, migration totals will refer to in-migration and out-migration, but are consistent with immigration and emigration, respectively.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Scale</th>
+<th>Area</th>
+<th>Event Term</th>
+<th>Migrant Term</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Internal</td>
+<td>Origin</td>
+<td>out-migration</td>
+<td>out-migrant</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Destination</td>
+<td>in-migration</td>
+<td>in-migrant</td>
+</tr>
+<tr class="odd">
+<td>International</td>
+<td>Origin</td>
+<td>emigration</td>
+<td>emigrant</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Destination</td>
+<td>immigration</td>
+<td>immigrant</td>
+</tr>
+</tbody>
+</table>
+<p>The sum of the in-migration and out-migration totals (<span class="math inline">\(m_{i+} + m_{+j}\)</span>) provides the migration <em>turnover</em> of each region. Net migration totals provides a balance of movements in opposing directions from the difference between in-migration and out-migration (<span class="math inline">\(m_{+j} - m_{i+}\)</span>). Net migration measures are more typically obtained via demographic accounting, as a residual from the differences in population change, births and deaths over a period in each region. As this calculation does not require expensive migration data collection systems, net migration measures are one of the most common forms of migration measures.</p>
+<p>Net migration measures, however, have a number of notable drawbacks for migration analysis, as highlighted by <span class="citation" data-cites="rogers1990rnm">(<a href="references.html#ref-rogers1990rnm" role="doc-biblioref"><strong>rogers1990rnm?</strong></a>)</span>. In particular, net migration does not enumerate migrants themselves, but instead follows a residual of in-migrants and out-migrants. (there is truly no such thing as a ‘net migrant’!) Consequently, the social and behavioral dynamics related to the observed migration patterns can be missed. For example, a net migration of -100 might involve a region receiving no in-migrants and sending 100 out-migrants or receiving 1,000,000 migrants and sending 1,000,100 out-migrants. Further migration dynamics are also missed when looking at net migration rates (discussed in the next section) and regularities in age profiles of migration (discussed in Chapter X) are often preceded when using age-specific net migration measures.</p>
+</section>
+<section id="rate-measures" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="rate-measures"><span class="header-section-number">2.3.3</span> Rate measures</h3>
+<p>Migration rates are important indicators for understanding the dynamic nature of population movements - over time and for comparison among places. Out-migration (or emigration) rates are calculated by dividing the number of out-migrants or emigrants during a specific period by the population exposed to the likelihood of migration. This is represented by the formula:</p>
+<p><span class="math display">\[
+e^{[t, t +1]} = \frac{E^{[t, t +1]}}{P}k
+\]</span></p>
+<p>Here, <span class="math inline">\(e^{[t, t+1]}\)</span> represents the out or emigration rate, <span class="math inline">\(E^{[t, t +1]}\)</span> is the number of out-migrants or emigrants during the period, <span class="math inline">\(P\)</span> is the population exposed to the likelihood of migration, and <span class="math inline">\(k\)</span> is a constant, often set as 1000. The exposure population can be the population at the mid-interval, assuming migration is evenly distributed, or the population at the start or end of the interval if migration has a negligible effect on population change. Additionally, out-migration rates can be further decomposed by subsets of the population, such as age or sex:</p>
+<p><span class="math display">\[
+e^{[t, t +1]}_{i} = \frac{E_{i}^{[t, t +1]}}{P_{i}}k
+\]</span></p>
+<p>On the other hand, in-migration (or immigration) ratios are calculated by dividing the number of in-migrants or immigrants by the population not exposed to the risk of migrating into the region. The formula for in-migration ratio is:</p>
+<p><span class="math display">\[
+i^{[t, t +1]} = \frac{I^{[t, t +1]}}{P}k
+\]</span></p>
+<p>Similarly, net migration ratios are calculated by dividing the net migration (difference between in-migration and out-migration) by the population not exposed to migration risk:</p>
+<p><span class="math display">\[
+m^{[t, t +1]} = \frac{M^{[t, t +1]}}{P}k
+\]</span></p>
+<p>To underscore our previous point, , in-migration and net migration ratios are different from demographic rates because they use the resident population in the denominator, which is not a valid ‘population at risk.’. This approach satisfies the needs of the demographic balancing equation, as rates of gain and loss are measured relative to the same population. The demographic balancing equation is expressed as:</p>
+<p><span class="math display">\[
+\begin{aligned}
+P^{t+1} &amp;=  P^{t} + B^{[t, t +1]} - D^{[t, t +1]} +  M^{[t, t +1]} \\
+P^{t+1} &amp;=  P^{t} \left(1 + b^{[t, t +1]} - d^{[t, t +1]} +  m^{[t, t +1]} \right)\\
+&amp;= P^{t} \left(1 + b^{[t, t +1]} - d^{[t, t +1]} +  i^{[t, t +1]} - e^{[t, t +1]} \right)
+\end{aligned}
+\]</span></p>
+<p>where <span class="math inline">\(P^{t+1}\)</span> is the population at the next time point, <span class="math inline">\(b^{[t, t+1]}\)</span> and <span class="math inline">\(d^{[t, t+1]}\)</span> represent births and deaths during the period, and $i^{[t, t+1]} $ and <span class="math inline">\(e^{[t, t+1]}\)</span> denote in-migration and out-migration rates. Net migration <span class="math inline">\(M^{[t, t+1]}\)</span> can be substituted with the difference between in-migration and out-migration <span class="math inline">\(I^{[t, t+1]} - O^{[t, t+1]}\)</span>. The equation can be simplified as:</p>
+<p><span class="math display">\[
+\begin{aligned}
+P^{t+1}&amp;= P^{t} + B^{[t, t +1]} - D^{[t, t +1]} +  I^{[t, t +1]} - O^{[t, t +1]} \\
+&amp;= P^{t} \left(1 + b^{[t, t +1]} - d^{[t, t +1]} +  i^{[t, t +1]} - o^{[t, t +1]} \right)
+\end{aligned}
+\]</span></p>
+<p>This formulation allows for the analysis of population change considering the effects of births, deaths, in-migration, and out-migration.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./00-intro.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./02-data.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Handling Migration Data in R</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

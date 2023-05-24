@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.475">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Handling, Measuring, Estimating and Visualizing Migration Data in R - 5&nbsp; Summary Migration Indices</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./03-net.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary Migration Indices</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Handling, Measuring, Estimating and Visualizing Migration Data in R</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./00-intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01-concepts.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Migration Concepts</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02-data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Handling Migration Data in R</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03-net.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Net Migration</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04-indices.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary Migration Indices</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#migration-intensity" id="toc-migration-intensity" class="nav-link active" data-scroll-target="#migration-intensity"><span class="toc-section-number">5.1</span>  Migration intensity</a></li>
+  <li><a href="#migration-distance" id="toc-migration-distance" class="nav-link" data-scroll-target="#migration-distance"><span class="toc-section-number">5.2</span>  Migration distance</a>
+  <ul class="collapse">
+  <li><a href="#creating-distance-matrices-in-r" id="toc-creating-distance-matrices-in-r" class="nav-link" data-scroll-target="#creating-distance-matrices-in-r"><span class="toc-section-number">5.2.1</span>  Creating distance matrices in R</a></li>
+  <li><a href="#migration-distance-measures" id="toc-migration-distance-measures" class="nav-link" data-scroll-target="#migration-distance-measures"><span class="toc-section-number">5.2.2</span>  Migration Distance Measures</a></li>
+  <li><a href="#migration-distance-measures-in-r" id="toc-migration-distance-measures-in-r" class="nav-link" data-scroll-target="#migration-distance-measures-in-r"><span class="toc-section-number">5.2.3</span>  Migration Distance Measures in R</a></li>
+  </ul></li>
+  <li><a href="#migration-connectivity" id="toc-migration-connectivity" class="nav-link" data-scroll-target="#migration-connectivity"><span class="toc-section-number">5.3</span>  Migration connectivity</a>
+  <ul class="collapse">
+  <li><a href="#connectivity" id="toc-connectivity" class="nav-link" data-scroll-target="#connectivity"><span class="toc-section-number">5.3.1</span>  Connectivity</a></li>
+  <li><a href="#inequality" id="toc-inequality" class="nav-link" data-scroll-target="#inequality"><span class="toc-section-number">5.3.2</span>  Inequality</a></li>
+  <li><a href="#gini-measures" id="toc-gini-measures" class="nav-link" data-scroll-target="#gini-measures"><span class="toc-section-number">5.3.3</span>  Gini measures</a></li>
+  <li><a href="#spatial-focusing" id="toc-spatial-focusing" class="nav-link" data-scroll-target="#spatial-focusing"><span class="toc-section-number">5.3.4</span>  Spatial Focusing</a></li>
+  <li><a href="#coefficient-of-variation" id="toc-coefficient-of-variation" class="nav-link" data-scroll-target="#coefficient-of-variation"><span class="toc-section-number">5.3.5</span>  Coefficient of Variation</a></li>
+  </ul></li>
+  <li><a href="#migration-impact" id="toc-migration-impact" class="nav-link" data-scroll-target="#migration-impact"><span class="toc-section-number">5.4</span>  Migration impact</a>
+  <ul class="collapse">
+  <li><a href="#migration-effectiveness-index" id="toc-migration-effectiveness-index" class="nav-link" data-scroll-target="#migration-effectiveness-index"><span class="toc-section-number">5.4.1</span>  Migration effectiveness index</a></li>
+  <li><a href="#aggregate-net-migration-rate" id="toc-aggregate-net-migration-rate" class="nav-link" data-scroll-target="#aggregate-net-migration-rate"><span class="toc-section-number">5.4.2</span>  Aggregate net migration rate</a></li>
+  <li><a href="#preference-and-velocity" id="toc-preference-and-velocity" class="nav-link" data-scroll-target="#preference-and-velocity"><span class="toc-section-number">5.4.3</span>  Preference and velocity</a></li>
+  <li><a href="#migration-impact-measures-in-r" id="toc-migration-impact-measures-in-r" class="nav-link" data-scroll-target="#migration-impact-measures-in-r"><span class="toc-section-number">5.4.4</span>  Migration Impact Measures in R</a></li>
+  </ul></li>
+  <li><a href="#applying-index-functions-multiple-times" id="toc-applying-index-functions-multiple-times" class="nav-link" data-scroll-target="#applying-index-functions-multiple-times"><span class="toc-section-number">5.5</span>  Applying index functions multiple times</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary Migration Indices</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Cross national comparisons of migration patterns has received relatively far less attention compared to studies on other the other demographic components of population change. This disparity is largely due to the complexity of migration data, which prevents direct comparisons across nations, regions and over time. There are several factors contributing to the intricacy of such comparisons, including:</p>
+<ol type="1">
+<li><p><strong>Measurement of Migration</strong>: Nations employ a wide range of definitions for migration and migrants. These definitions often vary across data sources, and may change over time, making it challenging to establish consistent criteria for measuring and comparing migration data.</p></li>
+<li><p><strong>Data Collection Systems</strong>: The methods and systems used for collecting migration data differ within and among countries, further complicating comparisons. Discrepancies in data collection practices can affect the quality, coverage, and reliability of migration statistics.</p></li>
+<li><p><strong>Administrative Boundries</strong>: Administrative boundaries, such as regions, local authorities, or municipalities, vary in size within and across countries. This variation in regional scales can influence the levels, interpretations, and analyses of migration patterns, as migration patterns are greatly influenced by the size and number of areas being studied.</p></li>
+<li><p><strong>Changes to Administrative Boundaries</strong>: The shapes or number of administrative boundaries within a country may change over time due to population change or political reforms. Such changes can disrupt the continuity and consistency of migration data, making it challenging to track migration trends accurately.</p></li>
+<li><p><strong>Distance Measurement</strong>: As migration flows are typically measured by the crossing of administrative boundaries, analyses that incorporate distance are affected by how administrative spatial units are converted into to points used to calculate distance, such as geographical centroids, population weighted centroids, and average travel time. Alternatively, distance may be simplified into measures of neighbours and non-neighbours.</p></li>
+<li><p><strong>Fluctuations in Population Sizes and Compositions</strong>: Population sizes and compositions can greatly affect migration patterns. They change over time and can introduce additional complexities when comparing migration data across different time periods or geographic areas.</p></li>
+</ol>
+<p>Given the above factors, it is important to consider the contextual nuances and data issues when conducting cross-national or temporal comparisons of migration patterns. In recent decades, a growing number of summary migration measures and indices have been proposed to address one or more of the factors above. <span class="citation" data-cites="Bell2002">(<a href="references.html#ref-Bell2002" role="doc-biblioref"><strong>Bell2002?</strong></a>)</span> brought together many of these measure and extended others to help facilitate the improved comparisons of internal migration across nations. These measures were incorporated into the IMAGE software, to build comparisons of internal migration patterns in multiple countries <span class="citation" data-cites="Bell2015">(<a href="references.html#ref-Bell2015" role="doc-biblioref"><strong>Bell2015?</strong></a>)</span>, <span class="citation" data-cites="Bell2015a">(<a href="references.html#ref-Bell2015a" role="doc-biblioref"><strong>Bell2015a?</strong></a>)</span>, <span class="citation" data-cites="Stillwell2016">(<a href="references.html#ref-Stillwell2016" role="doc-biblioref"><strong>Stillwell2016?</strong></a>)</span>, <span class="citation" data-cites="Rees2016">(<a href="references.html#ref-Rees2016" role="doc-biblioref"><strong>Rees2016?</strong></a>)</span>, and <span class="citation" data-cites="Bernard2014">(<a href="references.html#ref-Bernard2014" role="doc-biblioref"><strong>Bernard2014?</strong></a>)</span>.</p>
+<p>In the work of <span class="citation" data-cites="Bell2002">(<a href="references.html#ref-Bell2002" role="doc-biblioref"><strong>Bell2002?</strong></a>)</span>, four main groups of migration indices were proposed, providing a comprehensive framework for understanding and analyzing internal migration patterns. These indice groups are intensity, distance, connectivity, and impact – each group of indices are used to analyse particular aspects of migration. In the remainder of this chapter, we describe the main indices for each group and demonstrate how functions in R can be used to calculate them. We also show how they can be applied to study changes in migration patterns over time.</p>
+<section id="migration-intensity" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="migration-intensity"><span class="header-section-number">5.1</span> Migration intensity</h2>
+<p>Migration intensity measures focus on capturing the overall level or incidence (rate or propensity) of migration. These measures aim to provide a single indicator that allows for comparisons of migration levels over time, across regions for for the system as a whole. They are very useful in helping researchers understand the relative magnitude of migration when making camparisons. In our examples, we focus on the aggregate totals of migration. Indicators for examining age-specific patterns of migration are presented in the next chapter.</p>
+<p>Crude migration intensity (CMP) is a straightforward measure that provides an indication of the overall propensity to migrate. They are analogous to crude birth or death rates. The basic requirement for this indicator is a total number of persons changing their places of residence within a regional system. The system can include only migrants, i.e., only those cross geographic boundaries (or zeros in the diagonal of a migration flow table), or all persons changing residence (including within region moves). The CMP is calculated by dividing the total number of migrants (or movers) (<span class="math inline">\(M\)</span>) during a specific time period by the mid-period population at risk (<span class="math inline">\(P\)</span>), multiplied by 100 to express it as a percentage.<br>
+<span class="math display">\[
+\texttt{CMP} = 100 M/P
+\]</span> In the study by Courgeau (1973), the relationship between the intensity of migration and the number of regions in a country was examined. It was proposed that the crude migration probability (CMP) can be expressed as a function of the number of regions, denoted as ‘n’, and a constant ‘k’. <span class="math display">\[
+\texttt{CMP} = k \log (n^2)
+\]</span> The value of <span class="math inline">\(k\)</span> in Courgeau’s formula does not have an intrinsic meaning by itself. However, it serves as a scaling factor that allows for comparisons of migration intensity across zonal systems or administrative divisions used to collect migration data. A higher value of <span class="math inline">\(k\)</span> indicates a greater intensity of migration within a set of regions.</p>
+<p>The <em>migest</em> package offers the <code>index_intensity()</code> function, which facilitates the calculation of migration intensity measures. This function takes migration and population totals as inputs, alongside a value for the number of regions <code>n</code>, and calculates both intensity measures discussed above.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(migest)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">index_intensity</span>(<span class="at">mig_total =</span> <span class="dv">25</span>, <span class="at">pop_total =</span> <span class="dv">52</span>, <span class="at">n =</span> <span class="dv">17</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  measure    value
+  &lt;chr&gt;      &lt;dbl&gt;
+1 cmp        48.1 
+2 courgeau_k  8.48</code></pre>
+</div>
+</div>
+</section>
+<section id="migration-distance" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="migration-distance"><span class="header-section-number">5.2</span> Migration distance</h2>
+<p>When comparing migration patterns across different regions, it is important to consider the role of distance in determining variations in the intensities of movements across space. Migration involves movements between specific locations, and the numbers and sizes of regions affect the levels of migration intensity. Thus, there are several indicies focused on the relative importance of distance within a migration system.</p>
+<p>Measuring distances between regions is not always a straightforward task. Ideally, we would want to measure the typical distance that migrants travel though this information is unlikely to be available. One commonly used approximation is the straight-line distance between the region centroids of each region. Alternatively, one could could calculate the population-weighted centroid. This approach provides a better estimate of the average distances moved along a migration corridor, taking into account the spatial distribution of population within each region.</p>
+<p>There are several factors that can complicate distance measurements. For example, regions located near borders may have centroids that exaggerate the actual distance between them. Regions can vary significantly in shape and size, making it challenging to capture the true distance between them. Additionally, features such as indented coastlines can create cultural and travel cost differences, impacting migration patterns.</p>
+<section id="creating-distance-matrices-in-r" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="creating-distance-matrices-in-r"><span class="header-section-number">5.2.1</span> Creating distance matrices in R</h3>
+<p>In R, there are various functions available to calculate distance matrices, which can then be used to analyze migration patterns. These functions typically require a set of longitude and latitude coordinates to compute the distances between locations accurately. Some national statistics offices provide centroids for administrative areas. In situations where no centroid information is readily availble, researchers can turn to alternative sources to obtain population-weighted centroid estimates.</p>
+<p>The <a href="https://www.popgrid.org/">POPGRID</a> Data Collaborative brings together multiple research groups that publish estimates of past and future population gridded datasets. These estimates can be used to derive population-weighted centroids and facilitate the calculation of distance matrices for migration analysis.</p>
+<p>Below we demonstrate how to download the population centroids from the WorldPop, one of the research groups covered by POPGRID. CSV files contain the population centriods for all first-level subregions based on the global population gridded estimates in five-year intervals between 2000 and 2020 (<span class="citation" data-cites="Edwards2021">(<a href="references.html#ref-Edwards2021" role="doc-biblioref"><strong>Edwards2021?</strong></a>)</span>). For the example below, use the 2020 CSV file from the WorldPop website and temporarily unzip the file for reading into R (i.e., the fifth file in the zip folder) using the <code>archive_read</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(archive)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># read in data</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>pw <span class="ot">&lt;-</span> <span class="fu">archive_read</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">archive =</span> <span class="st">"https://data.worldpop.org/GIS/Population_Weighted_Density/Unconstrained_Subnational/100m/PWD_100m_sub_national_CSV.zip"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="dv">5</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_csv</span>()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># view</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>pw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3,521 × 25
+    year ISO   ISO_No Country_N Adm_N GID_1 HASC  PWC_Lat PWC_Lon    Pop Density
+   &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+ 1  2020 RUS      643 Russia    Adyg… RUS.… RU.AD    44.8    39.8 5.13e5    66.4
+ 2  2020 RUS      643 Russia    Altay RUS.… RU.AL    52.8    83.0 2.28e6    13.9
+ 3  2020 RUS      643 Russia    Amur  RUS.… RU.AM    51.2   128.  7.75e5     2.2
+ 4  2020 RUS      643 Russia    Arkh… RUS.… RU.AR    63.4    41.8 1.10e6     2.8
+ 5  2020 RUS      643 Russia    Astr… RUS.… RU.AS    46.6    47.8 1.04e6    23.5
+ 6  2020 RUS      643 Russia    Bash… RUS.… RU.BK    54.4    55.9 4.17e6    29.2
+ 7  2020 RUS      643 Russia    Belg… RUS.… RU.BL    50.8    37.2 1.63e6    57.7
+ 8  2020 RUS      643 Russia    Brya… RUS.… RU.BR    53.0    33.7 1.20e6    35.3
+ 9  2020 RUS      643 Russia    Bury… RUS.… RU.BU    52.0   108.  9.96e5     3  
+10  2020 RUS      643 Russia    Chec… RUS.… RU.CN    43.3    45.8 1.49e6    99  
+# … with 3,511 more rows, and 14 more variables: Area &lt;dbl&gt;, PWD_A &lt;dbl&gt;,
+#   PWD_G &lt;dbl&gt;, PWD_M &lt;dbl&gt;, PWD_D1 &lt;dbl&gt;, PWD_D2 &lt;dbl&gt;, PWD_D3 &lt;dbl&gt;,
+#   PWD_D4 &lt;dbl&gt;, PWD_D5 &lt;dbl&gt;, PWD_D6 &lt;dbl&gt;, PWD_D7 &lt;dbl&gt;, PWD_D8 &lt;dbl&gt;,
+#   PWD_D9 &lt;dbl&gt;, PWD_D10 &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>For illustration, we use data for South Korea to demonstrate how calculate a populated weighted distance matrix.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>kor_pw <span class="ot">&lt;-</span> pw <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(ISO <span class="sc">==</span> <span class="st">"KOR"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Adm_N, PWC_Lat, PWC_Lon, Pop)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>kor_pw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 17 × 4
+   Adm_N             PWC_Lat PWC_Lon      Pop
+   &lt;chr&gt;               &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Busan                35.2    129.  2925666
+ 2 Chungcheongbuk-do    36.7    128.  1629527
+ 3 Chungcheongnam-do    36.7    127.  2049544
+ 4 Daegu                35.8    129.  2098338
+ 5 Daejeon              36.3    127.  1595088
+ 6 Gangwon-do           37.7    128.  1446914
+ 7 Gwangju              35.2    127.  1396761
+ 8 Gyeonggi-do          37.4    127. 15014585
+ 9 Gyeongsangbuk-do     36.1    129.  2805942
+10 Gyeongsangnam-do     35.2    129.  3444121
+11 Incheon              37.4    127.  2964572
+12 Jeju                 33.4    127.   564353
+13 Jeollabuk-do         35.8    127.  1641019
+14 Jeollanam-do         34.9    127.  1703339
+15 Sejong               36.5    127.    61443
+16 Seoul                37.5    127.  8889778
+17 Ulsan                35.5    129.  1038185</code></pre>
+</div>
+</div>
+<p>The calculation of distances between centroids are calculated using the <code>distm()</code> function from the <em>geosphere</em> package. By providing the longitude and latitude coordinates of the centroids, the function can estimate the distances in meters.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(geosphere)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>kor_dist_pw <span class="ot">&lt;-</span> kor_pw <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(PWC_Lon, PWC_Lat) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distm</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To enhance the usability of the distance matrix, you can add the names of the origin and destination regions to the rows and columns of the matrix using the <code>dimnames()</code> function. Additionally, the distances can be divided by 1000 to convert them from meters to kilometers. These manipulations allow you to easily combine the distance matrix with migration data to perform further analyses.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(kor_dist_pw) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">orig =</span> kor_pw<span class="sc">$</span>Adm_N, <span class="at">dest =</span> kor_pw<span class="sc">$</span>Adm_N)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>kor_dist_pw <span class="ot">&lt;-</span> <span class="fu">round</span>(kor_dist_pw<span class="sc">/</span><span class="dv">1000</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>kor_dist_pw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   dest
+orig                Busan Chungcheongbuk-do Chungcheongnam-do Daegu Daejeon
+  Busan                 0               216               255    88     201
+  Chungcheongbuk-do   216                 0                58   130      45
+  Chungcheongnam-do   255                58                 0   174      54
+  Daegu                88               130               174     0     122
+  Daejeon             201                45                54   122       0
+  Gangwon-do          286               122               159   203     166
+  Gwangju             202               184               170   175     139
+  Gyeonggi-do         312                96                83   225     125
+  Gyeongsangbuk-do    107               125               176    32     128
+  Gyeongsangnam-do     43               190               222    72     168
+  Incheon             328               111                85   242     134
+  Jeju                306               381               368   333     337
+  Jeollabuk-do        201               111                96   143      66
+  Jeollanam-do        190               205               197   177     162
+  Sejong              222                37                34   141      22
+  Seoul               324               108                95   236     138
+  Ulsan                47               203               250    76     198
+                   dest
+orig                Gangwon-do Gwangju Gyeonggi-do Gyeongsangbuk-do
+  Busan                    286     202         312              107
+  Chungcheongbuk-do        122     184          96              125
+  Chungcheongnam-do        159     170          83              176
+  Daegu                    203     175         225               32
+  Daejeon                  166     139         125              128
+  Gangwon-do                 0     305         114              179
+  Gwangju                  305       0         252              202
+  Gyeonggi-do              114     252           0              215
+  Gyeongsangbuk-do         179     202         215                0
+  Gyeongsangnam-do         275     159         285              101
+  Incheon                  137     253          24              234
+  Jeju                     500     199         451              365
+  Jeollabuk-do             232      75         178              161
+  Jeollanam-do             325      31         279              207
+  Sejong                   155     155         104              143
+  Seoul                    113     265          13              226
+  Ulsan                    255     229         296               81
+                   dest
+orig                Gyeongsangnam-do Incheon Jeju Jeollabuk-do Jeollanam-do
+  Busan                           43     328  306          201          190
+  Chungcheongbuk-do              190     111  381          111          205
+  Chungcheongnam-do              222      85  368           96          197
+  Daegu                           72     242  333          143          177
+  Daejeon                        168     134  337           66          162
+  Gangwon-do                     275     137  500          232          325
+  Gwangju                        159     253  199           75           31
+  Gyeonggi-do                    285      24  451          178          279
+  Gyeongsangbuk-do               101     234  365          161          207
+  Gyeongsangnam-do                 0     299  277          160          148
+  Incheon                        299       0  450          180          281
+  Jeju                           277     450    0          275          176
+  Jeollabuk-do                   160     180  275            0          101
+  Jeollanam-do                   148     281  176          101            0
+  Sejong                         190     112  353           79          179
+  Seoul                          298      25  464          191          292
+  Ulsan                           76     314  351          212          222
+                   dest
+orig                Sejong Seoul Ulsan
+  Busan                222   324    47
+  Chungcheongbuk-do     37   108   203
+  Chungcheongnam-do     34    95   250
+  Daegu                141   236    76
+  Daejeon               22   138   198
+  Gangwon-do           155   113   255
+  Gwangju              155   265   229
+  Gyeonggi-do          104    13   296
+  Gyeongsangbuk-do     143   226    81
+  Gyeongsangnam-do     190   298    76
+  Incheon              112    25   314
+  Jeju                 353   464   351
+  Jeollabuk-do          79   191   212
+  Jeollanam-do         179   292   222
+  Sejong                 0   117   216
+  Seoul                117     0   307
+  Ulsan                216   307     0</code></pre>
+</div>
+</div>
+</section>
+<section id="migration-distance-measures" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="migration-distance-measures"><span class="header-section-number">5.2.2</span> Migration Distance Measures</h3>
+<p>To capture the average migration distance and account for the skewed distribution of distances, various methods can be employed. One approach is to calculate the weighted average of migration counts, where distances between regions serve as weights. This provides a summary measure of the average migration distance, taking into account the distances between origin and destination pairs.</p>
+<p><span class="citation" data-cites="Bell2002">(<a href="references.html#ref-Bell2002" role="doc-biblioref"><strong>Bell2002?</strong></a>)</span> suggests that the median average distance is preferable to the mean average distance due to the negatively skewed distribution of distances. This skewness reflects the distance decay effect. Comparing the median and mean average distances can provide insights into the degree of skewness in the distributions.</p>
+<p>To address skewness and model the relationship between migration counts and distances, a more comprehensive method involves fitting a predictive model. Different models can be utilized, often incorporating a log-transformed distance term and categorical control variables for the origin and destination regions. For example, a Poisson log-linear model can be employed, where the logarithm of the migration count (<span class="math inline">\(m_{ij}\)</span>) is related to the origin, destination, and log-distance as follows:</p>
+<p><span class="math display">\[
+\log(m_{ij}) = \beta_0 + \beta_{1i} \texttt{origin} + \beta_{2j} \texttt{destination} + \beta_{3} \log(\texttt{distance})
+\]</span></p>
+<p>The parameter of interest in this equation is the distance decay parameter (<span class="math inline">\(\beta_3\)</span>), which indicates the impact of distance on migration. The distance decay parameter is typically negative, implying that an increase in distance leads to a decrease in predicted migration. The set of parameters <span class="math inline">\(\beta_{1i}\)</span> and <span class="math inline">\(\beta_{2j}\)</span> represent the push and pull factors specific to each region, capturing the factors influencing migration behavior.</p>
+</section>
+<section id="migration-distance-measures-in-r" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="migration-distance-measures-in-r"><span class="header-section-number">5.2.3</span> Migration Distance Measures in R</h3>
+<p>The <em>migest</em> package in R provides the <code>index_distance()</code> function, which allows you to calculate three summary distance measures based on a set of migration flows and corresponding distance values between each origin and destination.</p>
+<p>To use the function, you can provide the origin-destination migration flows as either a matrix or a data frame. If using a data frame, the variable names are expected to be <code>orig</code>, <code>dest</code>, and <code>flow</code>. However, you have the flexibility to specify different variable names using the <code>orig_col</code>, <code>dest_col</code>, and <code>flow_col</code> arguments.</p>
+<p>Similarly, the distance values can be provided as a matrix or data frame. The variable names in the distance data are assumed to be <code>orig</code>, <code>dest</code>, and <code>dist</code>. Just like with migration flows, you can customize the variable names using the appropriate arguments.</p>
+<p>It is important to note that the origin and destination names in both the migration data and the distance data must match for accurate calculations. In cases where within-region migration moves are present in the data, the <code>index_distance()</code> function will automatically exclude them from the distance calculations.</p>
+<p>To demonstrate, we use internal migration data between first-level administrative districts in South Korea provided in the <code>korea_reg</code> data frame in <em>migest</em>. The data covers migration flows between 2012 and 2020 and was published by the Korean Statistical Information Service (KOSIS) at https://kosis.kr/eng.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2020 migration data</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>kor_mig_2020 <span class="ot">&lt;-</span> korea_reg <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2020</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># check no differences in names used in migration and distance data sets</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">symdiff</span>(<span class="at">x =</span> <span class="fu">unique</span>(kor_mig_2020<span class="sc">$</span>orig), <span class="at">y =</span> kor_pw<span class="sc">$</span>Adm_N)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>character(0)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">index_distance</span>(<span class="at">m =</span> kor_mig_2020, <span class="at">d =</span> kor_dist_pw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  measure   value
+  &lt;chr&gt;     &lt;dbl&gt;
+1 mean    105.   
+2 median   68.7  
+3 decay    -0.852</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="migration-connectivity" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="migration-connectivity"><span class="header-section-number">5.3</span> Migration connectivity</h2>
+<p>The size of migration flows between different migration corridors is influenced by various factors beyond population size and distance. The spatial patterns of migration also reflect historical, cultural, social, and economic ties between places. Connectivity indices are used to measure how destinations or origins are linked to other places. Often measures of inequality are used — connectivity can be thought of as type of inequality in the sense that low inequality means high connectivity and high inequality means low connectivity. For example, places that receive migrants from many places may experience higher levels of migration or more stable flows, whereas places that receive migrants from a few places may be susceptible by sudden increases or decreases in migrants due to changing economic, political or environmental conditions in the origin regions.</p>
+<p><span class="citation" data-cites="Bell2002">(<a href="references.html#ref-Bell2002" role="doc-biblioref"><strong>Bell2002?</strong></a>)</span> describes a fragmentation in the literature on the measurement of connections within a migration system, leading to the use of different terms such as <em>spatial connectivity</em>, <em>spatial concentration</em>, <em>spatial inequality</em>, and <em>spatial focusing</em>, among others. These terms highlight the importance of migration connections and the different perspectives from which they have be studied.</p>
+<p>To explore and analyze migration connectivity, there are numerous indices available. The <em>migration.indices</em> package, for instance, provides a range of indices that capture different dimensions of migration connectivity.</p>
+<p>Connectivity can be analysed using five measures: connectivity, inequality, Gini coefficients, spatial focusing, and coefficient of variation. These measures capture different aspects of the overall concentration of migration flows in a system, whilst two of the measures also offer extended perspectives on the concentration in-migration and out-migration flow totals.</p>
+<ol type="1">
+<li><p>Connectivity measures compares the proportions of migration to each region.</p></li>
+<li><p>Inequality measures examine the distribution of migration flows across regions, in comparison to expected migration flows.</p></li>
+<li><p>Gini coefficients, commonly used in economic inequality analysis, measure the concentration or dispersion of migration flows among regions.</p></li>
+<li><p>Spatial focusing measures identify the extent to which migration is concentrated or dispersed, indicating the level of spatial clustering or scattering of migrants across regions.</p></li>
+<li><p>Coefficient of variation measures the variability or diversity of migration flows across regions, providing insights into the heterogeneity of migration patterns.</p></li>
+</ol>
+<p>The <code>index_connectivity()</code> function in the <em>migest</em> package offers 11 different measures that capture various aspects of migration connectivity from these five groups. To calculate the measures, a user can provide a matrix or data frame containing the migration flows as input to the function. If using a data frame, the function assumes that the flows are specified in a column with the name “flow.” However, if your data frame uses a different variable name for the flows, you can specify it using the “flow_col” argument.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">index_connectivity</span>(<span class="at">m =</span> kor_mig_2020)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 2
+   measure                  value
+   &lt;chr&gt;                    &lt;dbl&gt;
+ 1 connectivity            1     
+ 2 inequality_equal        0.541 
+ 3 inequality_sim          0.281 
+ 4 gini_total              0.709 
+ 5 gini_orig_standardized  0.0493
+ 6 gini_dest_standardized  0.0517
+ 7 mwg_orig                0.0370
+ 8 mwg_dest                0.0389
+ 9 mwg_mean                0.0379
+10 cv                     17.9   
+11 acv                     3.43  </code></pre>
+</div>
+</div>
+<section id="connectivity" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="connectivity"><span class="header-section-number">5.3.1</span> Connectivity</h3>
+<p>The simplest connectivity (<code>connectivity</code> in the output above) evaluates the proportion of non-zero migration flows, excluding within-region flows. This measure is particularly useful when dealing with regions where populations are relatively small, which is more common when there are many administrative units. For the South Korea data used above, all migration corridors had non-zero migration flows during 2020</p>
+</section>
+<section id="inequality" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="inequality"><span class="header-section-number">5.3.2</span> Inequality</h3>
+<p>The inequality measures discussed by Bell (2002) are based on the distribution of observed flows compared to the expected distribution. The <code>inequality_equal</code> measure quantifies the distance between the observed flows and an expected distribution where all flows are equal. The <code>inequality_sim</code> measure quantifies the distance between the observed flows and an expected distribution derived from a spatial interaction model, such as a Poisson regression model for an independence fit.</p>
+<p><span class="math display">\[
+\widehat{\log(m_{ij})} = \beta_0 + \beta_{1i} \texttt{origin} + \beta_{2j} \texttt{destination}
+\]</span></p>
+<p>Both inequality measures range from 0 to 1, where a value of 0 indicates that the observed flows match the expected values, suggesting some form of equality, while a value of 1 represents the maximum distance between the observed flows and the expected flows, indicating maximum inequality in the distribution of migration flows.</p>
+</section>
+<section id="gini-measures" class="level3" data-number="5.3.3">
+<h3 data-number="5.3.3" class="anchored" data-anchor-id="gini-measures"><span class="header-section-number">5.3.3</span> Gini measures</h3>
+<p>The Gini migration measures provide insights into the spatial focusing of a migration system, assessing the extent to which migration flows are concentrated in specific corridors compared to others. They are calculated by comparing each flow in the migration matrix with every other flow to determine the degree of spatial focusing.</p>
+<p>The <code>gini_total</code> measure quantifies the overall spatial focusing in the migration flows. A value of zero indicates an equal distribution of flows across all corridors, indicating no spatial focusing. On the other hand, a value of 1 indicates maximum spatial focusing, where migration is concentrated in a single corridor.</p>
+<p>In addition to the <code>gini_total</code> measure, the <code>gini_orig_standardized</code> and <code>gini_dest_standardized</code> values provide insights into the spatial focusing from the perspectives of origin and destination regions, respectively. These measures compare the outflows from each origin region or the inflows to each destination region, respectively, to assess the spatial concentration of the migration patterns.</p>
+</section>
+<section id="spatial-focusing" class="level3" data-number="5.3.4">
+<h3 data-number="5.3.4" class="anchored" data-anchor-id="spatial-focusing"><span class="header-section-number">5.3.4</span> Spatial Focusing</h3>
+<p>The migration weighted Gini indexes specifically <code>mwg_orig</code> and <code>mwg_dest</code>, offer measures of focusing for the total in-migration and out-migration, respectively. , Also proposed by <span class="citation" data-cites="Bell2002">(<a href="references.html#ref-Bell2002" role="doc-biblioref"><strong>Bell2002?</strong></a>)</span>, these indexes assess the degree to which migration flows are concentrated in specific origins or destinations. A value of zero indicates no spatial focusing, while a value of 1 suggests that all migration flows pass through a single origin or destination.</p>
+<p>Additionally, the <code>mwg_mean</code> measure provides a system-wide measure of focusing for all migration totals. It is calculated as a simple average of <code>mwg_orig</code> and <code>mwg_dest</code>. Similar to the other Gini measures, the <code>mwg_mean</code> value ranges between zero and 1, with zero indicating no spatial focusing and 1 indicating a high concentration of migration in a single origin or destination.</p>
+</section>
+<section id="coefficient-of-variation" class="level3" data-number="5.3.5">
+<h3 data-number="5.3.5" class="anchored" data-anchor-id="coefficient-of-variation"><span class="header-section-number">5.3.5</span> Coefficient of Variation</h3>
+<p>The coefficient of variation (<code>cv</code> in the output from the <code>index_connectivity()</code> function above), as proposed by <span class="citation" data-cites="Rogers1998">(<a href="references.html#ref-Rogers1998" role="doc-biblioref"><strong>Rogers1998?</strong></a>)</span>, is a measure provided by the function that compares the mean of migration flows to the standard deviation of those flows. Unlike some of the previous measures, the coefficient of variation is not limited to a range of 0 to 1. It provides a quantitative measure of the variability in migration flows, where a higher coefficient of variation indicates greater inequality in the flows.</p>
+<p>In addition to the coefficient of variation, the aggregated system-wide coefficient of variation <span class="citation" data-cites="Rogers1998">(<a href="references.html#ref-Rogers1998" role="doc-biblioref"><strong>Rogers1998?</strong></a>)</span> calculates a similar measure of variation but based on the aggregate coefficient of variations of in-migration and out-migration totals. It takes into account the means and standard deviations of the total in-migration and out-migration flows. Similar to the <code>cv</code> measure, the <code>acv</code> (in the output from the <code>index_connectivity()</code> function above) is not restricted to a range of 0 to 1. It is particularly useful for making comparisons across different time periods or countries, as a rising coefficient of variation would indicate increasing inequality in migration flows or flow totals.</p>
+</section>
+</section>
+<section id="migration-impact" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="migration-impact"><span class="header-section-number">5.4</span> Migration impact</h2>
+<p>Migration impact measures are used to assess the degree to which migration contributes to the transformation of human settlement patterns. In many regions around the world, migration has become or is becoming the predominant mechanism driving population change and redistribution. Descriptive studies often concentrate on examining net migration counts at the regional level, which reveal whether migration adds or subtracts people from the overall population. However, as noted before, changes in migration volumes and may not always be revealed in net migration counts.</p>
+<p>Additional measures exist to provide a more comprehensive summary of the overall effect of migration in redistributing populations across the entire system of regions. These measures take into account not only the net migration totals but also the gross migration flows in or out of regions. By considering the complete migration picture, these measures offer insights into the broader impact of migration on population redistribution.</p>
+<section id="migration-effectiveness-index" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="migration-effectiveness-index"><span class="header-section-number">5.4.1</span> Migration effectiveness index</h3>
+<p>The migration effectiveness index (MEI), introduced by <span class="citation" data-cites="Shryock1976">(<a href="references.html#ref-Shryock1976" role="doc-biblioref"><strong>Shryock1976?</strong></a>)</span>, evaluates the asymmetry or equilibrium in a migration network by calculating the ratio of net migration to migration turnover. The MEI is calculated by taking the absolute sum of net migration and dividing it by the sum of in-migration plus out-migration, multiplied by 100.</p>
+<p><span class="math display">\[
+\texttt{MEI} = 100 \frac{\sum_{i} | \texttt{net} |}{\sum_{i} \texttt{turnover}_i} = 100 \frac{\sum_{i} | m_{+i} - m_{i+}|}{\sum_{i} m_{+i} + m_{i+}}
+\]</span></p>
+<p>The MEI ranges between 0 and 100. Higher values of the MEI indicate that migration is an efficient mechanism for population redistribution, as reflected by large net migration totals relative to the overall turnover. In other words, a higher MEI suggests that migration plays a significant role in reshaping the population distribution within the network.</p>
+<p>Conversely, values closer to zero are generated from more balanced migration systems with less pronounced population redistribution. A lower MEI indicates a relatively equitable distribution of migration flows, where the net migration values are smaller in relation to the turnover.</p>
+</section>
+<section id="aggregate-net-migration-rate" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="aggregate-net-migration-rate"><span class="header-section-number">5.4.2</span> Aggregate net migration rate</h3>
+<p>The aggregate net migration rate (ANMR), proposed by <span class="citation" data-cites="Bell2002">(<a href="references.html#ref-Bell2002" role="doc-biblioref"><strong>Bell2002?</strong></a>)</span>, captures the overall effect of migration on population settlement patterns. It is derived from the migration net totals and the populations of regions within a country. The ANMR replaces the denominator of the MEI formula with the population of each region, denoted as <span class="math inline">\(P_i\)</span>.</p>
+<p><span class="math display">\[
+\texttt{ANMR} = 100 \frac{1}{2} \frac{\sum_{i} |\texttt{net}_i|}{\sum_{i} P_i} = 100 \frac{1}{2} \frac{\sum_{i} | m_{+i} - m_{i+} |}{\sum_{i} P_i}
+\]</span></p>
+<p>The ANMR represents the net shift of population between regions per 100 residents in the country. Unlike the MEI, which uses migration turnover in the denominator, the ANMR utilizes the population of each region. This allows for a measurement of the net migration effect relative to the size of the population in each region.</p>
+<p>The ANMR has no upper limit, as it depends on the net migration values and the population sizes of the regions. A higher ANMR indicates a larger net shift of population between regions, relative to the overall population size in the country. It reflects the magnitude of population redistribution resulting from migration.</p>
+<p>Additionally, the ANMR can be seen as the product of the migration connectivity index (CMI) and the migration effectiveness index (MEI). It combines the measures of connectivity and effectiveness to provide an overall assessment of the impact of migration on population settlement patterns.</p>
+</section>
+<section id="preference-and-velocity" class="level3" data-number="5.4.3">
+<h3 data-number="5.4.3" class="anchored" data-anchor-id="preference-and-velocity"><span class="header-section-number">5.4.3</span> Preference and velocity</h3>
+<p>The manual by the <span class="citation" data-cites="UnitedNations1983">(<a href="references.html#ref-UnitedNations1983" role="doc-biblioref"><strong>UnitedNations1983?</strong></a>)</span> introduces two other impact measures for migration, although these measures have become less commonly used in recent years.</p>
+<p>The preference index is derived from an expected model of migration interactions based on population shares and the overall level of migration. It compares the observed migration flows (<span class="math inline">\(m_{ij}\)</span>) to an expected model where migration rates in all populations are the same.</p>
+<p><span class="math display">\[
+\texttt{preference} = \sum_{ij}{\frac{m_{ij}}{m_{++} \frac{p_{i}}{p_+}\frac{p_{j}}{p_+}}}
+\]</span></p>
+<p>where <span class="math inline">\(m_{++}\)</span> is the total migration flow, <span class="math inline">\(p_{+}\)</span> is the sum of populations in each region, and <span class="math inline">\(p_i\)</span> and <span class="math inline">\(p_j\)</span> are the population sizes of the origin and destination regions, respectively. The preference index measures the extent to which the observed flows deviate from the expected flows based on population shares and overall migration levels. There is no upper limit to the preference index.</p>
+<p>The velocity index, on the other hand, is based on a migration velocity measure (<span class="math inline">\(\frac{m_{ij}}{p_{i} p_{j}}\)</span>) multiplied by the total population and summed over all migration flows. It compares the observed flows to an expected model where flow sizes are determined solely by the population sizes of the origin and destination regions.</p>
+<p><span class="math display">\[
+\texttt{velocity}  = \sum_{ij}{\frac{m_{ij}}{p_{i} p_{j}}{p_+}}
+\]</span></p>
+<p>Similar to the preference index, the velocity index has no upper limit.</p>
+<p>Both the preference index and the velocity index provide measures of the deviation of observed migration flows from the expected patterns based on population sizes and overall migration levels. They offer alternative perspectives on the impact of migration on population redistribution, focusing on the relative significance of observed flows compared to expectations based on population factors alone.</p>
+</section>
+<section id="migration-impact-measures-in-r" class="level3" data-number="5.4.4">
+<h3 data-number="5.4.4" class="anchored" data-anchor-id="migration-impact-measures-in-r"><span class="header-section-number">5.4.4</span> Migration Impact Measures in R</h3>
+<p>The <code>index_impact()</code> function in the <em>migest</em> package allows for the calculation of all four impact measures: preference index, velocity index, migration effectiveness index (MEI), and aggregate net migration rate (ANMR). This function requires a set of migration flows and population sizes in each region.</p>
+<p>As with the previous index functions in the <em>migest</em> package, the migration flows can be provided as a matrix or a data frame. The function assumes that the column names for the regions and population values provided to the <code>p</code> argument are <code>region</code> and <code>pop</code>, respectively, in a data frame. If your data frame has different column names, you can specify them using the <code>reg_col</code> and <code>pop_col</code> parameters. In the code below we use the population estimates from the WorldPop group provided in the <code>Pop</code> column of the <code>kor_pw</code> ojbect created earlier.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">index_impact</span>(<span class="at">m =</span> kor_mig_2020, <span class="at">p =</span> kor_pw, <span class="at">pop_col =</span> <span class="st">"Pop"</span>, <span class="at">reg_col =</span> <span class="st">"Adm_N"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  measure        value
+  &lt;chr&gt;          &lt;dbl&gt;
+1 effectivness   7.67 
+2 anmr           0.379
+3 preference   916.   
+4 velocity      45.3  </code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="applying-index-functions-multiple-times" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="applying-index-functions-multiple-times"><span class="header-section-number">5.5</span> Applying index functions multiple times</h2>
+<p>Some of the summary measures discussed above are meaningless on their own, as they have no relative scale and have been calculated in isolation. However, the index functions can be applied to compare migration systems across different areas or time periods relatively easily using R, enabling comparative analyses.</p>
+<p>To apply the index functions multiple times, you can loop over the countries or time periods of interest and apply the functions within the loop. Alternatively, you can use vectorized operations or apply functions from the <em>dplyr</em> or <em>purrr</em> packages to handle multiple countries or time periods efficiently.</p>
+<p>To demonstrate the application of the index functions in the <em>migest</em> package, we can use the <code>korea_reg</code> data of internal migration flows between 2012 and 2020 in South Korea. First we use the <code>group_nest()</code> function from the <em>dplyr</em> package which transforms the data frame into a grouped data frame based on the <code>year</code> column, which is a necessary step for applying the index functions. Once the data is grouped, we can then apply the <code>index_connectivity()</code> function to each row using the <code>map()</code> function from the <em>purrr</em> package. This will calculate the connectivity measures for each year in the <code>korea_reg</code> data set. We may set <code>long = FALSE</code> within the <code>index_connectivity()</code> function to allow for separate columns for each measure. These can be viewed over time using the <code>unnest()</code> function in the <em>tidyr</em> package</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> korea_reg <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(orig <span class="sc">!=</span> dest) <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_nest</span>(year, <span class="at">.key =</span> <span class="st">"mig_data"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">connectivity =</span> <span class="fu">map</span>(<span class="at">.x =</span> mig_data, <span class="at">.f =</span> <span class="sc">~</span><span class="fu">index_connectivity</span>(.x, <span class="at">long =</span> <span class="cn">FALSE</span>)))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 3
+   year           mig_data connectivity     
+  &lt;int&gt; &lt;list&lt;tibble[,3]&gt;&gt; &lt;list&gt;           
+1  2012          [272 × 3] &lt;tibble [1 × 11]&gt;
+2  2013          [272 × 3] &lt;tibble [1 × 11]&gt;
+3  2014          [272 × 3] &lt;tibble [1 × 11]&gt;
+4  2015          [272 × 3] &lt;tibble [1 × 11]&gt;
+5  2016          [272 × 3] &lt;tibble [1 × 11]&gt;
+6  2017          [272 × 3] &lt;tibble [1 × 11]&gt;
+7  2018          [272 × 3] &lt;tibble [1 × 11]&gt;
+8  2019          [272 × 3] &lt;tibble [1 × 11]&gt;
+9  2020          [272 × 3] &lt;tibble [1 × 11]&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(connectivity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 13
+   year         mig_data conne…¹ inequ…² inequ…³ gini_…⁴ gini_…⁵ gini_…⁶ mwg_o…⁷
+  &lt;int&gt; &lt;list&lt;tibble[,3&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1  2012        [272 × 3]       1   0.554   0.266   0.718  0.0500  0.0498  0.0380
+2  2013        [272 × 3]       1   0.552   0.270   0.717  0.0501  0.0499  0.0381
+3  2014        [272 × 3]       1   0.542   0.282   0.707  0.0507  0.0495  0.0380
+4  2015        [272 × 3]       1   0.537   0.284   0.703  0.0509  0.0496  0.0378
+5  2016        [272 × 3]       1   0.541   0.277   0.707  0.0505  0.0502  0.0376
+6  2017        [272 × 3]       1   0.538   0.285   0.703  0.0502  0.0506  0.0374
+7  2018        [272 × 3]       1   0.541   0.281   0.707  0.0497  0.0511  0.0370
+8  2019        [272 × 3]       1   0.537   0.280   0.703  0.0493  0.0514  0.0366
+9  2020        [272 × 3]       1   0.541   0.281   0.709  0.0493  0.0517  0.0370
+# … with 4 more variables: mwg_dest &lt;dbl&gt;, mwg_mean &lt;dbl&gt;, cv &lt;dbl&gt;, acv &lt;dbl&gt;,
+#   and abbreviated variable names ¹​connectivity, ²​inequality_equal,
+#   ³​inequality_sim, ⁴​gini_total, ⁵​gini_orig_standardized,
+#   ⁶​gini_dest_standardized, ⁷​mwg_orig</code></pre>
+</div>
+</div>
+<p>This approach allows for easy comparison and analysis of migration systems between different areas or time periods. For example, we can see that connectivity measures such as the <code>inequality_equal</code> and <code>gini_total</code> showed a decreases after initial higher values during 2012 and 2013 in the proceeding seven years from 2014 to 2020.</p>
+<p>We can use similar code to calculate the distance indices.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">distance =</span> <span class="fu">map</span>(<span class="at">.x =</span> mig_data, <span class="at">.f =</span> <span class="sc">~</span><span class="fu">index_distance</span>(<span class="at">m =</span> .x, <span class="at">d =</span> kor_dist_pw, <span class="at">long =</span> <span class="cn">FALSE</span>)))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, distance) <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(distance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 4
+   year  mean median  decay
+  &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1  2012  108.   76   -0.784
+2  2013  107.   76   -0.795
+3  2014  108.   76   -0.816
+4  2015  108.   76   -0.828
+5  2016  107.   76   -0.820
+6  2017  108.   75.8 -0.839
+7  2018  107.   74.8 -0.839
+8  2019  107.   75.8 -0.836
+9  2020  105.   68.7 -0.852</code></pre>
+</div>
+</div>
+<p>The measures illustrate a decline in the mean and median distances over the nine years, whilst the distance decay parameter increases - again implying declining shorter migration distances.</p>
+<p>The impact and intensity measures require additional data on populatino sizes, which are provided in the <code>korea_pop</code> data frame in the <em>migest</em> package. These can be added to the data frame of the index calculations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add population data</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> korea_pop <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_nest</span>(year, <span class="at">.key =</span> <span class="st">"pop_data"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">right_join</span>(d, <span class="at">by =</span> <span class="st">"year"</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 5
+   year           pop_data           mig_data connectivity      distance        
+  &lt;int&gt; &lt;list&lt;tibble[,2]&gt;&gt; &lt;list&lt;tibble[,3]&gt;&gt; &lt;list&gt;            &lt;list&gt;          
+1  2012           [17 × 2]          [272 × 3] &lt;tibble [1 × 11]&gt; &lt;tibble [1 × 3]&gt;
+2  2013           [17 × 2]          [272 × 3] &lt;tibble [1 × 11]&gt; &lt;tibble [1 × 3]&gt;
+3  2014           [17 × 2]          [272 × 3] &lt;tibble [1 × 11]&gt; &lt;tibble [1 × 3]&gt;
+4  2015           [17 × 2]          [272 × 3] &lt;tibble [1 × 11]&gt; &lt;tibble [1 × 3]&gt;
+5  2016           [17 × 2]          [272 × 3] &lt;tibble [1 × 11]&gt; &lt;tibble [1 × 3]&gt;
+6  2017           [17 × 2]          [272 × 3] &lt;tibble [1 × 11]&gt; &lt;tibble [1 × 3]&gt;
+7  2018           [17 × 2]          [272 × 3] &lt;tibble [1 × 11]&gt; &lt;tibble [1 × 3]&gt;
+8  2019           [17 × 2]          [272 × 3] &lt;tibble [1 × 11]&gt; &lt;tibble [1 × 3]&gt;
+9  2020           [17 × 2]          [272 × 3] &lt;tibble [1 × 11]&gt; &lt;tibble [1 × 3]&gt;</code></pre>
+</div>
+</div>
+<p>Two data sets in each year can be passed to the <code>index_impact()</code> function using the <code>map2()</code> function in the <em>purrr</em> package</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">impact =</span> <span class="fu">map2</span>(<span class="at">.x =</span> mig_data, <span class="at">.y =</span> pop_data, </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">.f =</span> <span class="sc">~</span><span class="fu">index_impact</span>(<span class="at">m =</span> .x, <span class="at">p =</span> .y, <span class="at">pop_col =</span> <span class="st">"population"</span>, <span class="at">long =</span> <span class="cn">FALSE</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The intensity measures require only the migration and population totals in each year. These can be calculated by summing the appropriate columns in each data frame and passing the totals to the <code>index_intensity()</code> function</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate migration and population totals for intensity measure</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mig_total =</span> <span class="fu">map_dbl</span>(<span class="at">.x =</span> mig_data, <span class="at">.f =</span> <span class="sc">~</span><span class="fu">sum</span>(.x<span class="sc">$</span>flow)),</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">pop_total =</span> <span class="fu">map_dbl</span>(<span class="at">.x =</span> pop_data, <span class="at">.f =</span> <span class="sc">~</span><span class="fu">sum</span>(.x<span class="sc">$</span>population)),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">intensity =</span> <span class="fu">map2</span>(<span class="at">.x =</span> mig_total, <span class="at">.y =</span> pop_total, </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>                          <span class="at">.f =</span> <span class="sc">~</span><span class="fu">index_intensity</span>(<span class="at">mig_total =</span> .x, <span class="at">pop_total =</span> .y, <span class="at">n =</span> <span class="dv">17</span>, <span class="at">long =</span> <span class="cn">FALSE</span>)))</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, <span class="fu">contains</span>(<span class="st">"total"</span>), intensity) <span class="sc">%&gt;%</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(intensity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 5
+   year mig_total pop_total   cmp courgeau_k
+  &lt;int&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
+1  2012   2512740  50948272  4.93      0.870
+2  2013   2423429  51141463  4.74      0.836
+3  2014   2507796  51327916  4.89      0.862
+4  2015   2551424  51529338  4.95      0.874
+5  2016   2453342  51696216  4.75      0.838
+6  2017   2410930  51778544  4.66      0.822
+7  2018   2429184  51826059  4.69      0.827
+8  2019   2384948  51849861  4.60      0.812
+9  2020   2534114  51829023  4.89      0.863</code></pre>
+</div>
+</div>
+<p>In the case of South Korea, there does not appear to be a general trend for either intensity measure over the nine year period.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./03-net.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Net Migration</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
