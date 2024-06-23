@@ -1,0 +1,313 @@
+# Describing Bilteral Migration Data
+
+Origin-destination migration provide valuable insights into the patterns and dynamics of population movement between specific geographic locations. Understanding the characteristics of migration patterns is crucial for policy planning, regional development, and addressing demographic challenges. Various methods have been developed to summarise the dynamics of bilateral migration.
+
+## Gravity Models and Spatial Interaction Models
+
+Spatial interaction models and gravity models are widely used in the field of migration studies to understand and analyze the patterns and determinants of migration flows between geographic locations. These models provide a framework for quantifying the relationship between the origin and destination regions, considering factors such as distance, population size, and other socio-economic variables.
+
+Spatial interaction models are based on the principle that the flow of migrants between two locations is influenced by the characteristics of both the origin and destination regions and interacting factors. These models typically incorporate variables such as distance, population size, economic opportunities, and transportation infrastructure to estimate the intensity of migration flows. The gravity model, a specific type of spatial interaction model, draws inspiration from Newton's law of gravity, suggesting that migration flows are inversely proportional to the distance between locations and directly proportional to the population sizes of the origin and destination regions @Zipf. The basis gravity model of migration is typically extended to incorporate additional factors such as economic indicators, cultural ties, and policy factors. By analyzing these factors, researchers can identify the key determinants of migration, assess the impact of policy interventions, and make predictions about future migration patterns.
+
+Methods for fitting spatial interaction and gravity models have been developed in various software throughout their development in recent decades. Researchers have showed equivalences between different algorithms used to estimate parameters in spatial interaction models and those used by statistical regression techniques, for example, in the context of migration @Flowerdew1982 @flowerdew1982flg @Willekens1983. 
+
+The fitting of regression models in R is relatively simple and flexible. There exists a range of regression model functions that can be used to specify various forms of spatial interaction and gravity models. Most forms of migration models can be fitted using the `glm()` function (for generalised linear models). The function requires three main arguments: `formula`, `data`, and `family`.
+
+The `formula` argument specifies the relationship between the response variable and the explanatory variables. The response variable is placed on the left-hand side of the `~` symbol, and the explanatory variables are listed on the right-hand side, separated by `+`. For example, in the context of migration flow modeling, a formula could be defined as `flow ~ orig + dest + distance`, where `flow` represents the response variable and `orig`, `dest`, and `distance` are the explanatory variables. The `:` or `*` symbols can be used to specify interactions between variables.
+
+The `data` argument specifies the data frame containing the variables used in the model. It should include the response variable and all the explanatory variables. The `family` argument specifies the distributional assumption for the model. In the case of regression models commonly used in migration analysis, the `family` argument is usually set to distribution that can only take positive count values, such as `poisson()`, or the less restrictive `gaussian()` (the default in `glm()`) which assumes migration can be any value, which will then be positive when the response variable has `log()` transformation. 
+
+```{r}
+# write some code to show fitting glm regression models for basic spatial interaction model
+
+# write some code to show fitting glm regression models for basic gravity model
+
+```
+- Note expanded migration models include additional distance measure terms.
+- Expand on functions for more complicated regression models
+    - Negative binomial `glm.nb()` in *MASS* package
+- Note expanded spatial interaction model include additional variables on the origin and destiation characteristics - need to use multilevel regression models so that the parameters are not aliased (estimated)
+    - Multilevel regression models for random effects models `glmer()` in *lme4*
+    - Link to the gravity package for more indepth discussion and models https://pacha.dev/gravity/
+    
+
+## Multiplicative Component Model 
+
+
+@Rogers2002 introduced a method to disaggregate origin-destination flow tables into separate components, enabling a more detailed examination of migration patterns. This disaggregation allows for a clearer understanding of the factors influencing migration, including overall migration levels, the relative strengths of origin "push" factors and destination "pull" factors, and the interaction between specific origin and destination pairs.
+
+The components proposed by Rogers include:
+
+1. Overall Component: This represents the general level of migration, denoted as $\gamma$. It captures the total migration flow observed in the origin-destination table.
+
+2. Origin Component: This component, denoted as $\alpha_i$, measures the relative "push" factors from each origin region. It reflects the extent to which certain factors in the origin regions influence individuals to migrate.
+
+3. Destination Component: This component, denoted as $\beta_j$, represents the relative "pull" factors to each destination region. It captures the attractiveness or opportunities offered by specific destination regions that attract migrants.
+
+4. Origin-Destination Interaction Component: This component, denoted as $\delta_{ij}$, accounts for the migration flow between specific origin and destination pairs that cannot be explained by the overall and main effects. It captures factors such as physical or social distance between places that influence migration patterns beyond the overall and main effects.
+
+To estimate these components, simple calculations can be performed using the origin-destination flow data. These calculations involve mathematical operations and manipulations of the flow table to obtain the values for each component.
+
+$$
+\gamma = m_{++} \qquad \alpha_i = \dfrac{m_{i+}}{m_{++}} \qquad \beta_j = \dfrac{m_{+j}}{m_{++}} \qquad  \delta_{ij} = \dfrac{m_{ij}}{\gamma\alpha_i\beta_j}
+$$
+
+The dis-aggregation of the components is multiplicative: 
+$$
+m_{ij} = \gamma \alpha_i \beta_j \delta_{ij}
+$$
+- Equivalent to a saturated Poisson regression model ($R^2 = 1$)  where 
+    - $\gamma$ is constant term
+    - $\alpha_i$ is categorical term for the origin regions
+    - $\beta_j$ is categorical term for the destination regions
+    - $\delta_{ij}$ is an interaction term between the  $\alpha_i$ and  $\beta_j$
+$$
+\log m_{ij} = \gamma +  \alpha_i ORIG_i + \beta_j DEST_j +  \delta_i ORIG_i:DEST_j
+$$
+- When data is in a tidy format with row $h$ would be:
+$$
+\log y_{h} =  \beta_0 +  \beta_1 ORIG_{h} + \beta_2 DEST_{h} + \beta_3 ORIG_{h}:DEST_{h}
+$$
+- Poisson regression models such as these - where all the predictor variables are categorical - are also know as log-linear models
+- Standard functions for fitting regression models, such as `glm()` in R will provide the same fitted values, but different parameter estimates
+    - Use different coding system for the constraints when estimating parameters
+    - Rogers' terms the parameter estimates using the equations for $\gamma, \alpha_i, \beta_j$ and $\delta_{ij}$ above the *total reference* coding system
+
+### Multiplicative Component Model 
+
+- The *migest* package contains a `multi_comp()` function to generate parameter estimates from an origin-destination flow matrix
+    - Demonstrate with previous dummy data set
+
+```{r, message=FALSE}
+r <- LETTERS[1:4]
+m0 <- matrix(data = c(0, 100, 30, 70, 
+                      50, 0, 45, 5, 
+                      60, 35, 0, 40, 
+                      20, 25, 20, 0), 
+             nrow = 4, ncol = 4, byrow = TRUE, 
+             dimnames = list(orig = r, dest = r))
+addmargins(m0)
+```
+
+### Multiplicative Component Model 
+
+```{r, message=FALSE, message=FALSE}
+library(tidyverse)
+library(migest)
+m0 %>%
+  multi_comp() %>%
+  round(3)
+```
+
+### Multiplicative Component Model 
+
+- As the model is saturated, the fitted values are the same as the observed values.
+
+```{r, message=FALSE}
+multi_comp(m = m0)
+
+# fitted value for A to B
+500 * 0.4 * 0.32 * 1.5625
+```
+
+
+### Multiplicative Component Model 
+
+- The total reference coding scheme for the parameter estimates are easier to examine than parameter estimates from a Poisson model fitted using `glm()`
+    - More detail on `glm()` in next section
+```{r}
+d0 <- as.data.frame.table(x = m0, responseName = "flow")
+f0 <- glm(formula = flow ~ orig + dest + orig * dest, family = poisson(), 
+           data = d0)
+f0
+```
+
+### Multiplicative Component Model 
+
+```{r}
+# fitted and observed values are the same
+d0 %>% 
+  as_tibble() %>%
+  mutate(fit = round(f0$fitted.values, digits = 5))
+```
+
+
+### Multiplicative Component Model 
+
+- Rogers' and colleagues have used the multiplicative component model to estimate migration flow tables
+- Expand to multiple dimensions
+- Rectify bumpy age schedules
+    - Replace reported age parameters (proportions) in the multiplicative component model with proportions from a more regular schedule. 
+    - Multiply the new age parameters with the existing total, origin, destination and interaction parameters to obtain new estimated flows. 
+
+### Multiplicative Component Model
+
+- Italian data in *migest* package
+```{r, message = FALSE}
+italy_area
+```
+
+### Multiplicative Component Model
+
+```{r}
+# single year, multiple age groups
+c0 <- italy_area %>%
+  filter(year == 2000) %>%
+  multi_comp()
+round(c0, 3)
+```
+
+### Multiplicative Component Model
+
+```{r}
+# origin components (shares)
+c0 %>%
+  as.data.frame.table(responseName = "comp") %>%
+  filter(orig != "Sum", dest == "Sum", age_grp == "Sum")
+
+# destination components (shares)
+c0 %>%
+  as.data.frame.table(responseName = "comp") %>%
+  filter(orig == "Sum", dest != "Sum", age_grp == "Sum")
+```
+
+### Multiplicative Component Model
+
+```{r, fig.height=4}
+# age components
+c0 %>%
+  as.data.frame.table(responseName = "comp") %>%
+  filter(orig == "Sum", dest == "Sum", age_grp != "Sum") %>%
+  ggplot(mapping = aes(x = age_grp, y = comp, group = 1)) +
+  geom_line() +
+  theme(axis.text = element_text(angle = 45, hjust = 1))
+```
+
+# Log-Linear Models
+
+## .
+
+### Log-Linear Models
+
+- Rogers' and collaborators like to shorten the multiplicative form of the log-linear model to use capital letters to represent parameters
+$$
+m_{ij} = \gamma \alpha_i \beta_j \delta_{ij} = T O_i D_j OD_{ij}
+$$
+- When there is multiple origin-destination tables, by different age groups, sex, education level, etc,... the notation can be easily used to study different log-linear models 
+$$
+m_{ij} = T O_i D_j A_x OD_{ij} OA_{ix}
+$$
+- When data is in a tidy format with row $h$ would be:
+$$
+\begin{aligned}
+\log y_{h} =&  \beta_0 +  \beta_1 ORIG_{h} + \beta_2 DEST_{h} + \beta_3 AGE_{x} + \\
+&\beta_4 ORIG_{h}:DEST_{h} + \beta_5 ORIG_{h}:AGE_{h} 
+\end{aligned}
+$$
+
+
+### Log-Linear Models
+
+
+- We can fit log-linear models in R using the `glm()` function (for generalised linear models)
+- Requires a `formula`, `data` and `family` argument
+- The `formula` argument is similar to that in `xtabs()`, where we use the `~` symbol to separate the the response and explanatory variables
+    - For example the model in the previous slide would use `formula = flow ~ orig + dest + age + orig:dest + orig:age`
+    - Use `:` or `*` to denote interactions
+- The `family` argument should be set to `poisson()` for a log-linear model
+
+### Log-Linear Models
+
+- Example with age-specific migration flows between Italian regions in 1970
+
+```{r}
+d1 <- italy_area %>%
+  filter(orig != dest, 
+         year == 1970) %>%
+  # rename so later output fits on slide
+  rename(age = age_grp)
+d1
+```
+
+    
+### Log-Linear Models
+
+```{r}
+glm(formula = flow ~ orig + dest, family = poisson(), data = d1)
+```
+
+# Dimensions
+
+## . 
+
+### Log-Linear Model Analysis
+
+- As we increase the number of dimensions of the data, it might become important to understand which dimensions of the data are most important
+- We can use log-linear models with detailled migration data to
+    - Understand the dominate dimensions, for example @VanImhoff1997 @rogers2002dms
+    - Predict origin-destination flows with partial data, for example @deBeer2010 @Rogers2003a @Raymer2007b
+    - Project detailed origin-destination flows, for example @Raymer2006
+- All the above examples involve fitting a number log-linear models based on different dimensions of the data frames
+    - Use model fit statistics to judge the best model
+    
+### Log-Linear Model Analysis
+
+- One approach to choosing the most important dimensions is to fit all possible combinations of models - known as *dredging* the model space
+- The `dredge()` function in the *MuMIn* package will fit all combinations of regression models given an upper limit, i.e. the most complex model.
+    - The number of combinations grows exponentially with the number of predictors 
+    - Does not allow `na.action = "na.omit"` - set by default in `glm()` for handling missing values in regression models
+
+
+### Log-Linear Model Analysis
+
+- Fit the most complex model using `glm()`. 
+    - Set `na.action = na.fail` to exclude failed models in when using the `dredge()` function later
+    - Most complex model typically involves at least all two-way interactions
+- The `formula` argument in `glm()` allows the use `()^2` to construct all two-way interactions, i.e. the below give the identical outputs
+    - Use `()^3` for all three way interactions
+```{r, cache=TRUE}
+f1 <- glm(formula = flow ~ (orig + dest + age)^2, 
+          family = poisson(), data = d1, na.action = na.fail)
+f2 <- glm(formula = flow ~ orig * dest + orig * age + dest * age,
+          family = poisson(), data = d1, na.action = na.fail)
+
+# check terms used in models
+attr(f1$terms, "term.labels")
+attr(f2$terms, "term.labels")
+```
+
+### Log-Linear Model Analysis
+
+- Models will have many estimated coefficients 
+    - Some will be non-determinable because no observations (e.g. diagonal terms such as `origIslands:destIslands` below) as 
+```{r, cache=TRUE}
+f1 %>% 
+  coef() %>% 
+  length()
+summary(f1)
+```
+
+
+
+### Log-Linear Model Analysis
+
+- Pass the upper model to `dredge()`. Use `trace = TRUE` to monitor progress.
+```{r, cache=TRUE}
+library(MuMIn)
+mm <- dredge(global.model = f1, trace = TRUE)
+```
+
+### Log-Linear Model Analysis
+
+
+```{r}
+mm
+```
+
+
+### Log-Linear Model Analysis
+
+- Model comparison based on model statistics measuring the goodness of fit.
+    - AIC measures a goodness of fit with a penalty for the number of predictor variables. 
+    - AICc has a bias correction term for small samples
+- Typically the origin-destination interaction term is very important for accurately predicting the age-specific origin-destination migration flows
+- The time to conduct a dredging analysis increase exponentially as the number of dimensions increases.

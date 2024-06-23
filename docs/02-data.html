@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.2.475">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
 <title>Handling, Measuring, Estimating and Visualizing Migration Data in R - 3&nbsp; Handling Migration Data in R</title>
 <style>
 code{white-space: pre-wrap;}
@@ -85,7 +82,6 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -103,8 +99,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -123,28 +118,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-submit-button-title": "Submit"
   }
 }</script>
-
-
 </head>
-
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Handling Migration Data in R</span></h1>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }"><div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">
+<span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Handling Migration Data in R</span>
+</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Handling, Measuring, Estimating and Visualizing Migration Data in R</a> 
     </div>
@@ -156,7 +144,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
   </div>
@@ -188,36 +176,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./05-age.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Migration Age Schedules</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
     </ul>
-    </div>
-</nav>
-<!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+</div>
+</nav><!-- margin-sidebar --><div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#contingency-table" id="toc-contingency-table" class="nav-link active" data-scroll-target="#contingency-table"><span class="toc-section-number">3.1</span>  Contingency Table</a></li>
+<li><a href="#contingency-table" id="toc-contingency-table" class="nav-link active" data-scroll-target="#contingency-table"><span class="toc-section-number">3.1</span>  Contingency Table</a></li>
   <li><a href="#data-creation" id="toc-data-creation" class="nav-link" data-scroll-target="#data-creation"><span class="toc-section-number">3.2</span>  Data Creation</a></li>
   <li><a href="#data-manipulation" id="toc-data-manipulation" class="nav-link" data-scroll-target="#data-manipulation"><span class="toc-section-number">3.3</span>  Data Manipulation</a></li>
   <li><a href="#matrix-operations" id="toc-matrix-operations" class="nav-link" data-scroll-target="#matrix-operations"><span class="toc-section-number">3.4</span>  Matrix Operations</a></li>
-  <li><a href="#summaries" id="toc-summaries" class="nav-link" data-scroll-target="#summaries"><span class="toc-section-number">3.5</span>  Summaries</a>
+  <li>
+<a href="#summaries" id="toc-summaries" class="nav-link" data-scroll-target="#summaries"><span class="toc-section-number">3.5</span>  Summaries</a>
   <ul class="collapse">
-  <li><a href="#bilateral-measures" id="toc-bilateral-measures" class="nav-link" data-scroll-target="#bilateral-measures"><span class="toc-section-number">3.5.1</span>  Bilateral measures</a></li>
+<li><a href="#bilateral-measures" id="toc-bilateral-measures" class="nav-link" data-scroll-target="#bilateral-measures"><span class="toc-section-number">3.5.1</span>  Bilateral measures</a></li>
   <li><a href="#total-measures" id="toc-total-measures" class="nav-link" data-scroll-target="#total-measures"><span class="toc-section-number">3.5.2</span>  Total Measures</a></li>
-  </ul></li>
   </ul>
-</nav>
+</li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Handling Migration Data in R</span></h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title d-none d-lg-block">
+<span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Handling Migration Data in R</span>
+</h1>
 </div>
 
 
@@ -230,11 +220,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   </div>
   
 
-</header>
-
-<p>The R statistical language provides many powerful tools to carry out data analysis. In this chapter we highlight some useful R functions to manipulate migration data into specific formats that might be required for more advanced functions to analysis or visualization.</p>
-<section id="contingency-table" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="contingency-table"><span class="header-section-number">3.1</span> Contingency Table</h2>
+</header><p>The R statistical language provides many powerful tools to carry out data analysis. In this chapter we highlight some useful R functions to manipulate migration data into specific formats that might be required for more advanced functions to analysis or visualization.</p>
+<section id="contingency-table" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="contingency-table">
+<span class="header-section-number">3.1</span> Contingency Table</h2>
 <p>Bilateral migration data are often organized and represented in square tables, commonly referred to as migration matrices or migration flow tables. These tables are contingency tables, otherwise know as cross-tabulations or frequency tables, used in data analysis and statistics. Migration flow tables provide a structured way to organize and summarize origin-destination migration data, with rows representing the regions of origin and columns representing the regions of destinations. The cells in the table capture the number of persons migrating from one region to another. The inspection of migration tables themselves provide valuable insights into the magnitudes and directions of migration between different regions.</p>
 
 <table>
@@ -361,18 +349,16 @@ Sum
 500
 </td>
 </tr>
-
 </tbody></table>
 <p>The diagonal cells in migration flow tables represent populations that either do not migrate (remain) or make moves within the same region. These values are useful to provide a relative sense of migration in relation to local mobility or to the population not migrating. Alternatively, one can place zeros in the diagonal elements (or nothing as in the table above) so that the table only consists of those migrating between regions.</p>
-</section>
-<section id="data-creation" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="data-creation"><span class="header-section-number">3.2</span> Data Creation</h2>
-<p>In R, migration flow tables can be created directly using the <code>matrix()</code> or <code>array()</code> functions. Both functions create <code>array</code> type objects. They are sometimes a pre-requisite for more complicated functions used for describing, estimating or visualising bilateral migration data.</p>
-<p>The <code>matrix()</code> function allows users to specify the dimensions of the matrix and populate it with desired values. It can be used to create matrices of any size, and supports various options for filling in the matrix, such as using a sequence of numbers, replicating values, or using auxiliary data sources. Data is provided via a vector passed to the <code>data</code> argument. By default the data populates the matrix from the first column on, which can be altered by setting <code>byrow = FALSE</code>.</p>
+</section><section id="data-creation" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="data-creation">
+<span class="header-section-number">3.2</span> Data Creation</h2>
+<p>In R, migration flow tables can be created directly using the <code><a href="https://rdrr.io/r/base/matrix.html">matrix()</a></code> or <code><a href="https://rdrr.io/r/base/array.html">array()</a></code> functions. Both functions create <code>array</code> type objects. They are sometimes a pre-requisite for more complicated functions used for describing, estimating or visualising bilateral migration data.</p>
+<p>The <code><a href="https://rdrr.io/r/base/matrix.html">matrix()</a></code> function allows users to specify the dimensions of the matrix and populate it with desired values. It can be used to create matrices of any size, and supports various options for filling in the matrix, such as using a sequence of numbers, replicating values, or using auxiliary data sources. Data is provided via a vector passed to the <code>data</code> argument. By default the data populates the matrix from the first column on, which can be altered by setting <code>byrow = FALSE</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">data =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">30</span>, <span class="dv">70</span>, <span class="dv">50</span>, <span class="dv">0</span>, <span class="dv">45</span>, <span class="dv">5</span>, <span class="dv">60</span>, <span class="dv">35</span>, <span class="dv">0</span>, <span class="dv">40</span>, <span class="dv">20</span>, <span class="dv">25</span>, <span class="dv">20</span>, <span class="dv">0</span>),</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">4</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>m0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">30</span>, <span class="fl">70</span>, <span class="fl">50</span>, <span class="fl">0</span>, <span class="fl">45</span>, <span class="fl">5</span>, <span class="fl">60</span>, <span class="fl">35</span>, <span class="fl">0</span>, <span class="fl">40</span>, <span class="fl">20</span>, <span class="fl">25</span>, <span class="fl">20</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>             nrow <span class="op">=</span> <span class="fl">4</span>, ncol <span class="op">=</span> <span class="fl">4</span>, byrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">m0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     [,1] [,2] [,3] [,4]
 [1,]    0  100   30   70
@@ -381,22 +367,22 @@ Sum
 [4,]   20   25   20    0</code></pre>
 </div>
 </div>
-<p>It is often valuable to supply a vector of character strings for the origin and destination names to the <code>matrix</code> data object. These can be linked to an existing <code>matrix</code> object using the <code>dimnames()</code> via the <code>dimnames</code> argument. The corresponding <code>rownames()</code> and <code>colnames()</code> functions can be used to assign or display individual dimension names.</p>
+<p>It is often valuable to supply a vector of character strings for the origin and destination names to the <code>matrix</code> data object. These can be linked to an existing <code>matrix</code> object using the <code><a href="https://rdrr.io/r/base/dimnames.html">dimnames()</a></code> via the <code>dimnames</code> argument. The corresponding <code><a href="https://rdrr.io/r/base/colnames.html">rownames()</a></code> and <code><a href="https://rdrr.io/r/base/colnames.html">colnames()</a></code> functions can be used to assign or display individual dimension names.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create region labels</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># create region labels</span></span>
+<span><span class="va">r</span> <span class="op">&lt;-</span> <span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span></span>
+<span><span class="va">r</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "A" "B" "C" "D"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check dimension names</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(m0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># check dimension names</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html">dimnames</a></span><span class="op">(</span><span class="va">m0</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>NULL</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add dimension names</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(m0) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">orig =</span> r, <span class="at">dest =</span> r)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>m0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># add dimension names</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html">dimnames</a></span><span class="op">(</span><span class="va">m0</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>orig <span class="op">=</span> <span class="va">r</span>, dest <span class="op">=</span> <span class="va">r</span><span class="op">)</span></span>
+<span><span class="va">m0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    dest
 orig  A   B  C  D
@@ -405,18 +391,18 @@ orig  A   B  C  D
    C 60  35  0 40
    D 20  25 20  0</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create matrix with dimension names directly</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># m0 &lt;- matrix(data = c(0, 100, 30, 70, 50, 0, 45, 5, 60, 35, 0, 40, 20, 25, 20, 0),</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#              nrow = 4, ncol = 4, byrow = TRUE,</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#              dimnames = list(orig = r, dest = r))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># create matrix with dimension names directly</span></span>
+<span><span class="co"># m0 &lt;- matrix(data = c(0, 100, 30, 70, 50, 0, 45, 5, 60, 35, 0, 40, 20, 25, 20, 0),</span></span>
+<span><span class="co">#              nrow = 4, ncol = 4, byrow = TRUE,</span></span>
+<span><span class="co">#              dimnames = list(orig = r, dest = r))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>In R, the <code>array()</code> function is used to create multidimensional arrays, which can have more than two dimensions. While the <code>matrix()</code> function creates two-dimensional structures.</p>
-<p>Similar to the <code>matrix()</code> function, the <code>array()</code> function allows users to define the dimensions of the array and populate it with desired values. However, in the <code>array()</code> function, the dimensions are specified as a vector to the <code>dim</code> argument, indicating the size of each dimension. The <code>array()</code> function can be seen as a generalization of the <code>matrix()</code> function, as matrices are a specific type of two-dimensional arrays. By using the <code>array()</code> function, users can work with data that requires more complex organization and analysis, such as migration flows cross classified by origin, destination and additional variables such as sex, age or education.</p>
+<p>In R, the <code><a href="https://rdrr.io/r/base/array.html">array()</a></code> function is used to create multidimensional arrays, which can have more than two dimensions. While the <code><a href="https://rdrr.io/r/base/matrix.html">matrix()</a></code> function creates two-dimensional structures.</p>
+<p>Similar to the <code><a href="https://rdrr.io/r/base/matrix.html">matrix()</a></code> function, the <code><a href="https://rdrr.io/r/base/array.html">array()</a></code> function allows users to define the dimensions of the array and populate it with desired values. However, in the <code><a href="https://rdrr.io/r/base/array.html">array()</a></code> function, the dimensions are specified as a vector to the <code>dim</code> argument, indicating the size of each dimension. The <code><a href="https://rdrr.io/r/base/array.html">array()</a></code> function can be seen as a generalization of the <code><a href="https://rdrr.io/r/base/matrix.html">matrix()</a></code> function, as matrices are a specific type of two-dimensional arrays. By using the <code><a href="https://rdrr.io/r/base/array.html">array()</a></code> function, users can work with data that requires more complex organization and analysis, such as migration flows cross classified by origin, destination and additional variables such as sex, age or education.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="at">data =</span> <span class="fu">sample</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="at">size =</span> <span class="dv">32</span>),</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">2</span>),</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">dimnames =</span> <span class="fu">list</span>(<span class="at">orig =</span> r, <span class="at">dest =</span> r, <span class="at">sex =</span> <span class="fu">c</span>(<span class="st">"female"</span>, <span class="st">"male"</span>)))</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>m1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">100</span>, size <span class="op">=</span> <span class="fl">32</span><span class="op">)</span>,</span>
+<span>            dim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>            dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>orig <span class="op">=</span> <span class="va">r</span>, dest <span class="op">=</span> <span class="va">r</span>, sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"female"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">m1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>, , sex = female
 
@@ -437,11 +423,10 @@ orig   A  B  C  D
    D  34 70 67 77</code></pre>
 </div>
 </div>
-</section>
-<section id="data-manipulation" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="data-manipulation"><span class="header-section-number">3.3</span> Data Manipulation</h2>
+</section><section id="data-manipulation" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="data-manipulation">
+<span class="header-section-number">3.3</span> Data Manipulation</h2>
 <p>Statistical offices, government agencies, and international organizations collect and disseminate migration data in different formats to accommodate the needs of users and researchers. The format of the data may not necessarily be in square matrices that can be read directly into R and converted into a <code>matrix</code> object. However, there are useful functions in R that can be employed to convert data into appropriate formats for migration analysis.</p>
-<p>The <code>xtabs()</code> function is particularly helpful as it enables the conversion of data frames in a tidy format <span class="citation" data-cites="Wickham2014">(<a href="references.html#ref-Wickham2014" role="doc-biblioref"><strong>Wickham2014?</strong></a>)</span> into matrices or arrays. It requires a <code>formula</code> argument that specifies the column names in the data frame that will be used to construct and populate the <code>matrix</code> or <code>array</code>. The formula consists of the left-hand side representing the column name with the data to fill, the <code>~</code> symbol to separate the left and right-hand sides, and the right-hand side representing the columns used for cross-classifying the left-hand variable (separated by <code>+</code>). The <code>data</code> argument specifies the object where the data presented in a tidy format with variables included in the formula.</p>
+<p>The <code><a href="https://rdrr.io/r/stats/xtabs.html">xtabs()</a></code> function is particularly helpful as it enables the conversion of data frames in a tidy format <span class="citation" data-cites="Wickham2014">(<a href="references.html#ref-Wickham2014" role="doc-biblioref"><strong>Wickham2014?</strong></a>)</span> into matrices or arrays. It requires a <code>formula</code> argument that specifies the column names in the data frame that will be used to construct and populate the <code>matrix</code> or <code>array</code>. The formula consists of the left-hand side representing the column name with the data to fill, the <code>~</code> symbol to separate the left and right-hand sides, and the right-hand side representing the columns used for cross-classifying the left-hand variable (separated by <code>+</code>). The <code>data</code> argument specifies the object where the data presented in a tidy format with variables included in the formula.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16 × 3
@@ -473,12 +458,12 @@ orig  A  B  C  D
    D 13 14 15 16</code></pre>
 </div>
 </div>
-<p>The <code>as.data.frame.table()</code> function provides an inverse of the data manipulation of the <code>xtabs()</code> function, whereby it takes a <code>matrix</code> or <code>array</code> and converts it into a data frame based on the array dimension names. The <code>responseName</code> argument can be used to set the column name of the values in the cells of the <code>matrix</code> or <code>array</code>.</p>
+<p>The <code><a href="https://rdrr.io/r/base/table.html">as.data.frame.table()</a></code> function provides an inverse of the data manipulation of the <code><a href="https://rdrr.io/r/stats/xtabs.html">xtabs()</a></code> function, whereby it takes a <code>matrix</code> or <code>array</code> and converts it into a data frame based on the array dimension names. The <code>responseName</code> argument can be used to set the column name of the values in the cells of the <code>matrix</code> or <code>array</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert previous matrix back to tibble</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>m2 <span class="sc">%&gt;%</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame.table</span>(<span class="at">responseName =</span> <span class="st">"migration"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># convert previous matrix back to tibble</span></span>
+<span><span class="va">m2</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/table.html">as.data.frame.table</a></span><span class="op">(</span>responseName <span class="op">=</span> <span class="st">"migration"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16 × 3
    orig  dest  migration
@@ -501,13 +486,13 @@ orig  A  B  C  D
 16 D     D            16</code></pre>
 </div>
 </div>
-<p>Note, above we use <code>as_tibble()</code> to convert the <code>data.frame</code> object returned from <code>as.data.frame.table()</code> to the more user friendly <code>tibble</code> object type (insert citation) and use the pipe line function <code>%&gt;%</code> to combine together a sequence of R functions.</p>
+<p>Note, above we use <code>as_tibble()</code> to convert the <code>data.frame</code> object returned from <code><a href="https://rdrr.io/r/base/table.html">as.data.frame.table()</a></code> to the more user friendly <code>tibble</code> object type (insert citation) and use the pipe line function <code>%&gt;%</code> to combine together a sequence of R functions.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert array to tibble</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> m1 <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame.table</span>(<span class="at">responseName =</span> <span class="st">"flow"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>d1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># convert array to tibble</span></span>
+<span><span class="va">d1</span> <span class="op">&lt;-</span> <span class="va">m1</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/table.html">as.data.frame.table</a></span><span class="op">(</span>responseName <span class="op">=</span> <span class="st">"flow"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">d1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 32 × 4
    orig  dest  sex     flow
@@ -525,12 +510,11 @@ orig  A  B  C  D
 # … with 22 more rows</code></pre>
 </div>
 </div>
-</section>
-<section id="matrix-operations" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="matrix-operations"><span class="header-section-number">3.4</span> Matrix Operations</h2>
-<p>When working with <code>matrix</code> objects based on migration data in R there are additional functions that are useful for further formatting and data exploration. The <code>addmargins()</code> function is a useful tool for adding row and column margin totals to a <code>matrix</code> or <code>array</code> object.</p>
+</section><section id="matrix-operations" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="matrix-operations">
+<span class="header-section-number">3.4</span> Matrix Operations</h2>
+<p>When working with <code>matrix</code> objects based on migration data in R there are additional functions that are useful for further formatting and data exploration. The <code><a href="https://rdrr.io/r/stats/addmargins.html">addmargins()</a></code> function is a useful tool for adding row and column margin totals to a <code>matrix</code> or <code>array</code> object.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">addmargins</span>(<span class="at">A =</span> m0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/addmargins.html">addmargins</a></span><span class="op">(</span>A <span class="op">=</span> <span class="va">m0</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     dest
 orig    A   B  C   D Sum
@@ -543,8 +527,8 @@ orig    A   B  C   D Sum
 </div>
 <p>When working with migration matrices in R, it can sometimes be challenging to effectively view and analyze the data due to various factors such as lengthy dimension names and large unit sizes. Additionally, the inclusion of diagonal terms, which are often not of interest in migration analysis, can further complicate the interpretation of the matrix. R provides several helpful functions that can assist in adapting migration matrix objects for easier viewing and analysis. To illustrate, we use the <code>uar_1960</code> object from the <strong>migest</strong> package, which represents a lifetime migration matrix for the Governorates of the United Arab Republic in 1960 as documented in the United Nations manual by <span class="citation" data-cites="UnitedNations1983">(<a href="references.html#ref-UnitedNations1983" role="doc-biblioref"><strong>UnitedNations1983?</strong></a>)</span>. Notice how the object is difficult to view due to issues described above:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(migest)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>uar_1960</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://guyabel.github.io/migest/">migest</a></span><span class="op">)</span></span>
+<span><span class="va">uar_1960</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>            dest
 orig           Cairo Alexandria Port-Said Ismailia Kalyubia Gharbia Menoufia
@@ -574,9 +558,9 @@ orig            Giza Assyiut  Souhag All others
   All others   94577   14690   22375   11900302</code></pre>
 </div>
 </div>
-<p>When working with names or labels that are lengthy or contain unnecessary details, the <code>abbreviate()</code> function can be helpful. The function applies an algorithm to shorten the names while still retaining their essential information.</p>
+<p>When working with names or labels that are lengthy or contain unnecessary details, the <code><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate()</a></code> function can be helpful. The function applies an algorithm to shorten the names while still retaining their essential information.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(uar_1960)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html">dimnames</a></span><span class="op">(</span><span class="va">uar_1960</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$orig
  [1] "Cairo"      "Alexandria" "Port-Said"  "Ismailia"   "Kalyubia"  
@@ -588,16 +572,16 @@ $dest
  [6] "Gharbia"    "Menoufia"   "Giza"       "Assyiut"    "Souhag"    
 [11] "All others"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a copy</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>u0 <span class="ot">&lt;-</span> uar_1960</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># new abbreviated region names</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">orig =</span> uar_1960 <span class="sc">%&gt;%</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rownames</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">abbreviate</span>(),</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">dest =</span> uar_1960 <span class="sc">%&gt;%</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">colnames</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>            <span class="fu">abbreviate</span>())</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># make a copy</span></span>
+<span><span class="va">u0</span> <span class="op">&lt;-</span> <span class="va">uar_1960</span></span>
+<span><span class="co"># new abbreviated region names</span></span>
+<span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>orig <span class="op">=</span> <span class="va">uar_1960</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>          dest <span class="op">=</span> <span class="va">uar_1960</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>            <span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html">abbreviate</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">r</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$orig
      Cairo Alexandria  Port-Said   Ismailia   Kalyubia    Gharbia   Menoufia 
@@ -611,10 +595,10 @@ $dest
       Giza    Assyiut     Souhag All others 
     "Giza"     "Assy"     "Sohg"     "Allo" </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># apply the abbreviated region names</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(u0) <span class="ot">&lt;-</span> r</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>u0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># apply the abbreviated region names</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html">dimnames</a></span><span class="op">(</span><span class="va">u0</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">r</span></span>
+<span></span>
+<span><span class="va">u0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      dest
 orig      Cair    Alxn   Pr-S   Isml   Klyb    Ghrb    Menf    Giza    Assy
@@ -644,10 +628,10 @@ orig      Sohg     Allo
   Allo   22375 11900302</code></pre>
 </div>
 </div>
-<p>Basic arithmetic operators can be employed to scale the data to an appropriate level, such as dividing the values by a common factor or multiplying them to achieve a desired magnitude. This can be useful when working with migration matrices to adjust the values and make them more interpretable or comparable. The <code>round()</code> function which allows users to specify the precision of numbers in your migration data, which can be handy when working with migration rates or proportions.</p>
+<p>Basic arithmetic operators can be employed to scale the data to an appropriate level, such as dividing the values by a common factor or multiplying them to achieve a desired magnitude. This can be useful when working with migration matrices to adjust the values and make them more interpretable or comparable. The <code><a href="https://rdrr.io/r/base/Round.html">round()</a></code> function which allows users to specify the precision of numbers in your migration data, which can be handy when working with migration rates or proportions.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>u1 <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="at">x =</span> u0<span class="sc">/</span><span class="dv">1000</span>, <span class="at">digits =</span> <span class="dv">1</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>u1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">u1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">u0</span><span class="op">/</span><span class="fl">1000</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">u1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      dest
 orig     Cair   Alxn  Pr-S  Isml  Klyb   Ghrb   Menf   Giza   Assy   Sohg
@@ -677,11 +661,11 @@ orig      Allo
   Allo 11900.3</code></pre>
 </div>
 </div>
-<p>The <code>diag()</code> function allows users to manipulate the diagonal terms of a matrix, which can be much larger than the number of persons migrating in the non-diagonal cells. The <code>diag()</code> function takes a matrix as input and returns a new matrix with the same values, except that the diagonal elements are modified according to the specified rule. In the context of migration data, setting the diagonal terms to zero effectively removes the non-moving populations from the matrix, making it easier to analyze the migration flows.</p>
+<p>The <code><a href="https://rdrr.io/r/base/diag.html">diag()</a></code> function allows users to manipulate the diagonal terms of a matrix, which can be much larger than the number of persons migrating in the non-diagonal cells. The <code><a href="https://rdrr.io/r/base/diag.html">diag()</a></code> function takes a matrix as input and returns a new matrix with the same values, except that the diagonal elements are modified according to the specified rule. In the context of migration data, setting the diagonal terms to zero effectively removes the non-moving populations from the matrix, making it easier to analyze the migration flows.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>u2 <span class="ot">&lt;-</span> u0</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(u2) <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>u2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">u2</span> <span class="op">&lt;-</span> <span class="va">u0</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">u2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">0</span></span>
+<span><span class="va">u2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      dest
 orig     Cair   Alxn  Pr-S  Isml  Klyb  Ghrb  Menf  Giza  Assy  Sohg  Allo
@@ -698,14 +682,13 @@ orig     Cair   Alxn  Pr-S  Isml  Klyb  Ghrb  Menf  Giza  Assy  Sohg  Allo
   Allo 456464 177476 43898 66973 49816 47315 12179 94577 14690 22375     0</code></pre>
 </div>
 </div>
-</section>
-<section id="summaries" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="summaries"><span class="header-section-number">3.5</span> Summaries</h2>
-<section id="bilateral-measures" class="level3" data-number="3.5.1">
-<h3 data-number="3.5.1" class="anchored" data-anchor-id="bilateral-measures"><span class="header-section-number">3.5.1</span> Bilateral measures</h3>
+</section><section id="summaries" class="level2" data-number="3.5"><h2 data-number="3.5" class="anchored" data-anchor-id="summaries">
+<span class="header-section-number">3.5</span> Summaries</h2>
+<section id="bilateral-measures" class="level3" data-number="3.5.1"><h3 data-number="3.5.1" class="anchored" data-anchor-id="bilateral-measures">
+<span class="header-section-number">3.5.1</span> Bilateral measures</h3>
 <p>the <em>migest</em> package offers several useful functions for generating summaries of origin-destination migration data. One such function is <em>sum_bilat()</em>, which allows you to calculate the counter flow, net flow and interchange for all migration pairs. This function can accept either a <code>matrix</code>, <code>array</code> or a <code>data.frame</code> (or <code>tibble</code>) as input.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_bilat</span>(m0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="http://guyabel.github.io/migest/reference/sum_bilat.html">sum_bilat</a></span><span class="op">(</span><span class="va">m0</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 12 × 8
    orig  dest  corridor pair   flow counter_flow net_flow interchange
@@ -724,13 +707,12 @@ orig     Cair   Alxn  Pr-S  Isml  Klyb  Ghrb  Menf  Giza  Assy  Sohg  Allo
 12 C     D     C -&gt; D   C - D    40           20       20          60</code></pre>
 </div>
 </div>
-</section>
-<section id="total-measures" class="level3" data-number="3.5.2">
-<h3 data-number="3.5.2" class="anchored" data-anchor-id="total-measures"><span class="header-section-number">3.5.2</span> Total Measures</h3>
-<p>Another useful function in the <em>migest</em> package is <code>sum_region()</code>, which allows you to generate comprehensive summaries of in-migration, out-migration, net migration, and turnover totals for each region in your migration data. Similar to the <code>sum_bilat()</code> function, <code>sum_region()</code> also accepts either a <code>matrix</code> or a <code>data.frame</code> (or <code>tibble</code>) as input, providing flexibility in working with different data formats.</p>
-<p>By using the <code>sum_region()</code> function, you can obtain valuable information about migration flows at the regional level. It calculates the total number of migrants moving into each region (in-migration), the total number of migrants moving out of each region (out-migration), the net migration balance (in-migration minus out-migration), and the turnover (sum of in-migration and out-migration) for each region. These summaries are useful for further analyses and interpretations.</p>
+</section><section id="total-measures" class="level3" data-number="3.5.2"><h3 data-number="3.5.2" class="anchored" data-anchor-id="total-measures">
+<span class="header-section-number">3.5.2</span> Total Measures</h3>
+<p>Another useful function in the <em>migest</em> package is <code><a href="http://guyabel.github.io/migest/reference/sum_region.html">sum_region()</a></code>, which allows you to generate comprehensive summaries of in-migration, out-migration, net migration, and turnover totals for each region in your migration data. Similar to the <code><a href="http://guyabel.github.io/migest/reference/sum_bilat.html">sum_bilat()</a></code> function, <code><a href="http://guyabel.github.io/migest/reference/sum_region.html">sum_region()</a></code> also accepts either a <code>matrix</code> or a <code>data.frame</code> (or <code>tibble</code>) as input, providing flexibility in working with different data formats.</p>
+<p>By using the <code><a href="http://guyabel.github.io/migest/reference/sum_region.html">sum_region()</a></code> function, you can obtain valuable information about migration flows at the regional level. It calculates the total number of migrants moving into each region (in-migration), the total number of migrants moving out of each region (out-migration), the net migration balance (in-migration minus out-migration), and the turnover (sum of in-migration and out-migration) for each region. These summaries are useful for further analyses and interpretations.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum_region</span>(m0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="http://guyabel.github.io/migest/reference/sum_region.html">sum_region</a></span><span class="op">(</span><span class="va">m0</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 5
   region out_mig in_mig  turn   net
@@ -741,12 +723,12 @@ orig     Cair   Alxn  Pr-S  Isml  Klyb  Ghrb  Menf  Giza  Assy  Sohg  Allo
 4 D           65    115   180    50</code></pre>
 </div>
 </div>
-<p>Note, when the data provided to the <code>sum_region()</code> is a data frame, the origin and destination regions names are assumed to be in variables named <code>orig</code> and <code>dest</code>. In addition, the migration data are assumed to be in variable named <code>flow</code>. If the corresponding column names differ, the user can supply these to the <code>orig_col</code>, <code>dest_col</code> and <code>flow_col</code> argumenets in the <code>sum_region()</code> function.</p>
-<p>The <code>sum_country()</code> function provides the same calculations, along with summary variables names. When the input data for either the <code>sum_region()</code> or <code>sum_country()</code> functions represent more than two dimensions, the <code>group_by</code> function from the <em>dplyr</em> package should be used. To demonstrate, we use the international flow estimates of <span class="citation" data-cites="Abel2019">(<a href="references.html#ref-Abel2019" role="doc-biblioref"><strong>Abel2019?</strong></a>)</span> which can be downloaded and read directly into R from the online CSV file.</p>
+<p>Note, when the data provided to the <code><a href="http://guyabel.github.io/migest/reference/sum_region.html">sum_region()</a></code> is a data frame, the origin and destination regions names are assumed to be in variables named <code>orig</code> and <code>dest</code>. In addition, the migration data are assumed to be in variable named <code>flow</code>. If the corresponding column names differ, the user can supply these to the <code>orig_col</code>, <code>dest_col</code> and <code>flow_col</code> argumenets in the <code><a href="http://guyabel.github.io/migest/reference/sum_region.html">sum_region()</a></code> function.</p>
+<p>The <code><a href="http://guyabel.github.io/migest/reference/sum_region.html">sum_country()</a></code> function provides the same calculations, along with summary variables names. When the input data for either the <code><a href="http://guyabel.github.io/migest/reference/sum_region.html">sum_region()</a></code> or <code><a href="http://guyabel.github.io/migest/reference/sum_region.html">sum_country()</a></code> functions represent more than two dimensions, the <code>group_by</code> function from the <em>dplyr</em> package should be used. To demonstrate, we use the international flow estimates of <span class="citation" data-cites="Abel2019">(<a href="references.html#ref-Abel2019" role="doc-biblioref"><strong>Abel2019?</strong></a>)</span> which can be downloaded and read directly into R from the online CSV file.</p>
 <div class="cell" data-hash="02-data_cache/html/unnamed-chunk-14_cb86de2b8d5a1a3c68272e508ce447d1">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read data from web depository</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://ndownloader.figshare.com/files/26239945"</span>)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>f</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># read data from web depository</span></span>
+<span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">read_csv</span><span class="op">(</span><span class="st">"https://ndownloader.figshare.com/files/26239945"</span><span class="op">)</span></span>
+<span><span class="va">f</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 235,236 × 9
    year0 orig  dest  sd_drop_neg sd_rev_neg mig_rate da_min_open da_mi…¹ da_pb…²
@@ -764,10 +746,10 @@ orig     Cair   Alxn  Pr-S  Isml  Klyb  Ghrb  Menf  Giza  Assy  Sohg  Allo
 # … with 235,226 more rows, and abbreviated variable names ¹​da_min_closed,
 #   ²​da_pb_closed</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># single period (1990-1995)</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>f <span class="sc">%&gt;%</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year0 <span class="sc">==</span> <span class="dv">1990</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_country</span>(<span class="at">flow_col =</span> <span class="st">"da_pb_closed"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># single period (1990-1995)</span></span>
+<span><span class="va">f</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">year0</span> <span class="op">==</span> <span class="fl">1990</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="http://guyabel.github.io/migest/reference/sum_region.html">sum_country</a></span><span class="op">(</span>flow_col <span class="op">=</span> <span class="st">"da_pb_closed"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 197 × 5
    country    emi     imm    turn     net
@@ -784,11 +766,11 @@ orig     Cair   Alxn  Pr-S  Isml  Klyb  Ghrb  Menf  Giza  Assy  Sohg  Allo
 10 AUT     154853  382724  537577  227871
 # … with 187 more rows</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># all periods using group_by</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>f <span class="sc">%&gt;%</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year0) <span class="sc">%&gt;%</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum_country</span>(<span class="at">flow_col =</span> <span class="st">"da_pb_closed"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># all periods using group_by</span></span>
+<span><span class="va">f</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">year0</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="http://guyabel.github.io/migest/reference/sum_region.html">sum_country</a></span><span class="op">(</span>flow_col <span class="op">=</span> <span class="st">"da_pb_closed"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">country</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,188 × 6
 # Groups:   year0 [6]
@@ -809,11 +791,7 @@ orig     Cair   Alxn  Pr-S  Isml  Klyb  Ghrb  Menf  Giza  Assy  Sohg  Allo
 </div>
 
 
-</section>
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -945,9 +923,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./01-concepts.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Migration Concepts</span></span>
       </a>          
